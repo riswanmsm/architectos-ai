@@ -1,0 +1,8 @@
+/* Reset or global utility overrides */
+#root {
+  max-width: 100% !important;
+  width: 100% !important;
+  border-inline: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
