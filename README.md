@@ -6,6 +6,10 @@ ArchitectOS is the first collaborative engineering platform where specialized en
 
 ---
 
+<p align="center">
+  <img src="demo-assets/01_final_engineering_blueprint.png" alt="ArchitectOS Dashboard" width="900" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15)">
+</p>
+
 ## Problem Statement
 
 Every successful software product begins with collaboration between specialists. Product managers, business analysts, architects, database engineers, API designers, testers, security reviewers, and technical writers each contribute unique expertise before a single line of production code is written.
