@@ -68,6 +68,12 @@ graph TD
 
 ---
 
+### Workflow in Action (Interactive Demo)
+
+<p align="center">
+  <img src="demo-assets/workflow_recording.gif" alt="ArchitectOS Session Workflow" width="900" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15)">
+</p>
+
 ## Architecture Diagram
 
 ```text
