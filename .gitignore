@@ -1,78 +1,45 @@
-# Logs and Databases
-*.log
-*.sqlite
-*.db
-
-# OS Files
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# Environment and Credentials
+# ─────────────────────────────────
+# Environment & Secrets
+# ─────────────────────────────────
 .env
-.env.local
-.env.*.local
-*.pem
-*.key
-credentials.json
-secrets.json
+*.env
+!.env.example
 
-# Node / Frontend
-node_modules/
-dist/
-dist-ssr/
-*.local
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-.svelte-kit/
-.next/
-.nuxt/
-.vuepress/dist
-.cache/
-.parcel-cache/
-
-# Python / Backend
+# ─────────────────────────────────
+# Python
+# ─────────────────────────────────
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
+*.pyo
 .venv/
 venv/
-ENV/
-env/
+*.egg-info/
+dist/
+build/
 .pytest_cache/
-.tox/
-.coverage
-htmlcov/
-.mypy_cache/
-.ipynb_checkpoints
 
-# IDE / Editors
+# ─────────────────────────────────
+# Node / Frontend
+# ─────────────────────────────────
+node_modules/
+frontend/dist/
+frontend/.vite/
+
+# ─────────────────────────────────
+# macOS
+# ─────────────────────────────────
+.DS_Store
+
+# ─────────────────────────────────
+# IDE
+# ─────────────────────────────────
 .vscode/
 .idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
 *.swp
-*.swo
+
+# ─────────────────────────────────
+# Temp / Output files
+# ─────────────────────────────────
+tmp/
+output/
+outputs/

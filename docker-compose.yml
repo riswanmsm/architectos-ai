@@ -1,0 +1,18 @@
+services:
+  backend:
+    build: ./backend
+    env_file: .env
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        # Tells the Vite build where to reach the backend.
+        # Inside Docker the backend service is reachable at http://backend:8000
+        VITE_BACKEND_URL: http://backend:8000
+    ports:
+      - "5173:8080"
+    depends_on:
+      - backend

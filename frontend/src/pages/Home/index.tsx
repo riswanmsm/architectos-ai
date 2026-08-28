@@ -26,7 +26,9 @@ interface Blueprints {
   risks: string;
 }
 
-const BACKEND_URL = 'http://localhost:8000';
+// In dev: empty string → Vite proxy forwards /api to localhost:8000
+// In Docker/prod: set VITE_BACKEND_URL build arg to point at the backend service
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL ?? '';
 
 export default function Home() {
   const [idea, setIdea] = useState('');
