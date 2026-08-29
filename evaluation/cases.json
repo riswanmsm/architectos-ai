@@ -1,0 +1,130 @@
+{
+  "evaluation_version": "1.0.0",
+  "frozen": true,
+  "primary_metric": "verified_blueprint_coverage",
+  "cases": [
+    {
+      "id": "CASE-01",
+      "title": "Local service appointment booking",
+      "idea": "An application where customers book appointments with local service providers and providers manage availability.",
+      "obligations": [
+        "prevent_double_booking",
+        "customer_provider_role_authorization",
+        "timezone_aware_scheduling",
+        "cancellation_policy",
+        "concurrent_booking_test"
+      ]
+    },
+    {
+      "id": "CASE-02",
+      "title": "Small marketplace with refunds",
+      "idea": "A marketplace where independent sellers list products, customers place orders, and administrators handle refunds.",
+      "obligations": [
+        "seller_listing_ownership",
+        "payment_idempotency",
+        "refund_audit_trail",
+        "inventory_consistency",
+        "failed_payment_test"
+      ]
+    },
+    {
+      "id": "CASE-03",
+      "title": "Real-time whiteboard rooms",
+      "idea": "A collaborative whiteboard with private rooms, live drawing, reconnect support, history, and export.",
+      "obligations": [
+        "room_membership_authorization",
+        "concurrent_edit_strategy",
+        "reconnect_recovery",
+        "history_retention",
+        "unauthorized_room_access_test"
+      ]
+    },
+    {
+      "id": "CASE-04",
+      "title": "Multi-warehouse inventory alerts",
+      "idea": "An inventory application that tracks stock across warehouses and alerts operators before products run out.",
+      "obligations": [
+        "warehouse_scoped_permissions",
+        "atomic_stock_adjustment",
+        "duplicate_event_handling",
+        "alert_threshold_definition",
+        "negative_stock_test"
+      ]
+    },
+    {
+      "id": "CASE-05",
+      "title": "Event ticket reservations",
+      "idea": "A ticketing application where users reserve seats, pay, receive tickets, and request cancellations.",
+      "obligations": [
+        "seat_hold_expiration",
+        "oversell_prevention",
+        "payment_idempotency",
+        "ticket_ownership_authorization",
+        "concurrent_last_seat_test"
+      ]
+    },
+    {
+      "id": "CASE-06",
+      "title": "Team expense approvals",
+      "idea": "An application for employees to submit expenses and for managers and finance staff to review and approve them.",
+      "obligations": [
+        "submitter_approver_separation",
+        "approval_audit_trail",
+        "receipt_access_control",
+        "amount_limit_policy",
+        "self_approval_rejection_test"
+      ]
+    },
+    {
+      "id": "CASE-07",
+      "title": "Offline field inspections",
+      "idea": "A mobile application where field inspectors complete checklists and capture photos while offline, then synchronize later.",
+      "obligations": [
+        "offline_draft_persistence",
+        "sync_conflict_strategy",
+        "duplicate_upload_handling",
+        "photo_access_control",
+        "interrupted_sync_test"
+      ]
+    },
+    {
+      "id": "CASE-08",
+      "title": "Multi-tenant subscription workspace",
+      "idea": "A subscription SaaS where organizations create workspaces, invite members, assign roles, and manage billing.",
+      "obligations": [
+        "tenant_data_isolation",
+        "workspace_role_authorization",
+        "invitation_expiration",
+        "billing_webhook_idempotency",
+        "cross_tenant_access_test"
+      ]
+    },
+    {
+      "id": "CASE-09",
+      "title": "Community content moderation",
+      "idea": "A community application where members publish posts, report abuse, and moderators review reports and appeals.",
+      "obligations": [
+        "moderator_role_authorization",
+        "reporter_privacy",
+        "moderation_audit_trail",
+        "appeal_state_machine",
+        "unauthorized_moderation_test"
+      ]
+    },
+    {
+      "id": "CASE-10",
+      "title": "Challenging distributed project workspace",
+      "idea": "A global project workspace with organization-scoped documents, real-time co-editing, offline edits, regional data residency, external guests, and immutable audit history.",
+      "challenging": true,
+      "obligations": [
+        "tenant_and_guest_authorization",
+        "concurrent_edit_strategy",
+        "offline_conflict_resolution",
+        "regional_data_residency",
+        "immutable_audit_history",
+        "revoked_guest_offline_write_test",
+        "cross_region_failure_test"
+      ]
+    }
+  ]
+}
