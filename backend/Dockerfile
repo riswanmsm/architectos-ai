@@ -9,7 +9,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-COPY requirements.txt ./
+COPY backend/requirements.txt ./
 RUN python -m venv /app/venv
 
 ENV PATH="/app/venv/bin:${PATH}"
@@ -28,7 +28,9 @@ COPY --from=build /app/venv /app/venv
 
 # Copy only the application package. In particular, do not copy the local
 # virtual environment or .env file into the image.
-COPY --chown=nonroot:nonroot app ./app
+COPY --chown=nonroot:nonroot backend/app ./app
+COPY --chown=nonroot:nonroot architectos_llm ./architectos_llm
+COPY --chown=nonroot:nonroot config ./config
 
 EXPOSE 8000
 

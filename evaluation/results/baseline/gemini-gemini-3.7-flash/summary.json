@@ -1,0 +1,25 @@
+{
+  "evaluation_version": "1.0.0",
+  "prompt_version": "baseline-v1.0.0",
+  "system": "one_prompt_baseline",
+  "provider": "gemini",
+  "model": "gemini-3.7-flash",
+  "total_cases": 1,
+  "completed_cases": 1,
+  "failed_cases": 0,
+  "structured_output_validity_rate": 100.0,
+  "macro_average_vbc": 100.0,
+  "total_critical_findings": 0,
+  "total_runtime_seconds": 21.292,
+  "total_approximate_cost_usd": 0.00780075,
+  "cases": [
+    {
+      "case_id": "CASE-01",
+      "status": "completed",
+      "vbc": 100.0,
+      "critical_findings": 0,
+      "runtime_seconds": 21.292,
+      "approximate_cost_usd": 0.00780075
+    }
+  ]
+}

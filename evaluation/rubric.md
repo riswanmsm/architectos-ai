@@ -16,10 +16,10 @@ Both the one-prompt baseline and ArchitectOS must return the same structured blu
 | VBC-02 | Requirement test coverage | Every functional requirement links to at least one test case. |
 | VBC-03 | Protected-operation coverage | Every non-public operation declares authentication and an authorization rule. |
 | VBC-04 | Entity reference integrity | Every entity referenced by an API operation or component exists in the data model. |
-| VBC-05 | Measurable NFR coverage | Every NFR contains a numeric or objectively decidable target and a verification method. |
+| VBC-05 | Measurable NFR coverage | Every NFR contains a numeric or objectively decidable target and names an explicit test, measurement, audit, benchmark, scan, simulation, inspection, monitoring, or verification method. |
 | VBC-06 | Reference validity | Every referenced requirement, component, entity, operation, and test ID resolves. |
 | VBC-07 | Negative-test coverage | Authentication, authorization, validation, and relevant conflict paths have negative tests. |
-| VBC-08 | Case-obligation coverage | The blueprint represents each obligation declared for its evaluation case. |
+| VBC-08 | Case-obligation coverage | Every declared case obligation has a design response and valid evidence links. Test-named, authorization, access, isolation, idempotency, oversell, and double-booking obligations must link both design and test evidence. |
 
 ## Critical Findings
 

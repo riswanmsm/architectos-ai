@@ -1,6 +1,6 @@
 import os
 from typing import Dict, Any, List
-from app.services.gemini_service import generate_with_gemini
+from app.services.llm_service import generate_with_llm
 
 # Specialist Agent definitions, mapping IDs to metadata, personas, and prompts.
 # Design decision: Each specialist has a clear system role, set of duties, and structured templates.
@@ -173,4 +173,4 @@ def generate_specialist_blueprint(step_id: str, idea: str) -> str:
     if skill_content:
         prompt = f"Behavioral Contract:\n{skill_content}\n\nTask instructions:\n{prompt}"
         
-    return generate_with_gemini(prompt, fallback)
+    return generate_with_llm(prompt, fallback)

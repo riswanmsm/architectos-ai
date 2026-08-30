@@ -12,7 +12,7 @@ ArchitectOS orchestrates a team of **8 specialized AI engineering disciplines** 
 [![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115-green?logo=fastapi)](https://fastapi.tiangolo.com)
 [![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)](https://react.dev)
-[![Gemini](https://img.shields.io/badge/Gemini-2.5--flash-orange?logo=google)](https://ai.google.dev)
+[![LLM](https://img.shields.io/badge/LLM-Multi--Provider-orange)](docs/model-providers.md)
 [![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker)](https://docker.com)
 
 <br/>
@@ -25,12 +25,12 @@ ArchitectOS orchestrates a team of **8 specialized AI engineering disciplines** 
 
 ## ⚡ Quick Start (3 commands)
 
-> **Prerequisite:** A free [Gemini API key](https://aistudio.google.com/app/apikey) and [Docker](https://docs.docker.com/get-docker/).
+> **Prerequisite:** A supported model-provider API key and [Docker](https://docs.docker.com/get-docker/). Gemini is the default; OpenAI, DeepSeek, and Anthropic are configurable.
 
 ```bash
 git clone https://github.com/riswanmsm/architectos-ai.git
 cd architectos-ai
-cp .env.example .env        # paste your Gemini API key inside
+cp .env.example .env        # select a provider/model and add its key
 docker-compose up --build
 ```
 
@@ -121,7 +121,7 @@ graph TD
 | :--- | :--- |
 | **Frontend** | React 18, TypeScript, Vite, Vanilla CSS |
 | **Backend** | FastAPI, Pydantic, Uvicorn, Python 3.10 |
-| **AI** | Google Gemini 2.5 Flash (`google-genai` SDK) |
+| **AI** | Provider-neutral adapters for Gemini, OpenAI-compatible APIs, DeepSeek, and Anthropic |
 | **Container** | Docker + Docker Compose |
 | **Agent Design** | Custom orchestrator + skill-contract system |
 
@@ -135,12 +135,12 @@ graph TD
 ### Backend
 
 ```bash
-cd backend
-python -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-cp ../.env.example ../.env       # add your GEMINI_API_KEY
-uvicorn app.main:app --reload --port 8000
+# Run from the repository root so the shared provider package is importable.
+python -m venv backend/.venv
+source backend/.venv/bin/activate        # Windows: backend\.venv\Scripts\activate
+pip install -r backend/requirements.txt
+cp .env.example .env                     # select provider/model and add its key
+uvicorn --app-dir backend app.main:app --reload --port 8000
 ```
 
 ### Frontend
@@ -163,13 +163,16 @@ Open [http://localhost:5173](http://localhost:5173).
 architectos-ai/
 ├── .env.example                # Environment variable template
 ├── docker-compose.yml          # One-command launch
+├── architectos_llm/            # Shared model-provider adapters
+├── config/providers.json       # Provider, model, and pricing registry
+├── evaluation/                 # Baseline, rubric, cases, and evidence
 ├── backend/
 │   ├── Dockerfile
 │   ├── requirements.txt
 │   └── app/
 │       ├── main.py             # FastAPI entrypoint
 │       ├── models/             # Pydantic schemas
-│       ├── services/           # Gemini API client
+│       ├── services/           # Provider-neutral LLM service
 │       ├── agents/             # Specialist agent personas & prompts
 │       ├── orchestrator/       # Session routing & self-correction loop
 │       └── skills/             # Behavioral skill contracts (markdown)

@@ -1,0 +1,15 @@
+You are a general-purpose software planning assistant.
+
+Create a complete engineering blueprint for the application idea below in one response. Do not use tools, external context, specialist agents, iterative review, or self-correction. Return only data matching the required JSON schema.
+
+Application idea:
+An application where customers book appointments with local service providers and providers manage availability.
+
+The blueprint must explicitly consider these case obligations:
+- prevent_double_booking
+- customer_provider_role_authorization
+- timezone_aware_scheduling
+- cancellation_policy
+- concurrent_booking_test
+
+Use stable IDs with these prefixes: FR-, NFR-, COMP-, ENT-, API-, TEST-, and ASM-. Link artifacts using those IDs. Public operations may use null authentication and authorization. Non-public operations must describe both. For every obligation, provide a design response and evidence IDs that point to artifacts in the blueprint. Record uncertain product decisions as assumptions needing human review.
