@@ -1,0 +1,97 @@
+{
+  "evaluation_version": "1.0.0",
+  "prompt_version": "agent-workflow-v1.0.0",
+  "system": "multi_agent_architectos",
+  "provider": "gemini",
+  "model": "gemini-3.7-flash",
+  "total_cases": 10,
+  "completed_cases": 3,
+  "failed_cases": 7,
+  "structured_output_validity_rate": 30.0,
+  "macro_average_vbc": 99.6,
+  "total_critical_findings": 0,
+  "total_runtime_seconds": 47.203,
+  "total_approximate_cost_usd": 0.0312615,
+  "cases": [
+    {
+      "case_id": "CASE-01",
+      "status": "failed",
+      "vbc": null,
+      "critical_findings": 0,
+      "runtime_seconds": 34.111,
+      "approximate_cost_usd": null
+    },
+    {
+      "case_id": "CASE-02",
+      "status": "completed",
+      "vbc": 100.0,
+      "critical_findings": 0,
+      "runtime_seconds": 15.054,
+      "approximate_cost_usd": 0.00886125
+    },
+    {
+      "case_id": "CASE-03",
+      "status": "completed",
+      "vbc": 100.0,
+      "critical_findings": 0,
+      "runtime_seconds": 17.2,
+      "approximate_cost_usd": 0.013584
+    },
+    {
+      "case_id": "CASE-04",
+      "status": "failed",
+      "vbc": null,
+      "critical_findings": 0,
+      "runtime_seconds": 29.843,
+      "approximate_cost_usd": null
+    },
+    {
+      "case_id": "CASE-05",
+      "status": "failed",
+      "vbc": null,
+      "critical_findings": 0,
+      "runtime_seconds": 23.796,
+      "approximate_cost_usd": null
+    },
+    {
+      "case_id": "CASE-06",
+      "status": "failed",
+      "vbc": null,
+      "critical_findings": 0,
+      "runtime_seconds": 37.68,
+      "approximate_cost_usd": null
+    },
+    {
+      "case_id": "CASE-07",
+      "status": "failed",
+      "vbc": null,
+      "critical_findings": 0,
+      "runtime_seconds": 6.855,
+      "approximate_cost_usd": null
+    },
+    {
+      "case_id": "CASE-08",
+      "status": "completed",
+      "vbc": 98.8,
+      "critical_findings": 0,
+      "runtime_seconds": 14.949,
+      "approximate_cost_usd": 0.00881625
+    },
+    {
+      "case_id": "CASE-09",
+      "status": "failed",
+      "vbc": null,
+      "critical_findings": 0,
+      "runtime_seconds": 15.29,
+      "approximate_cost_usd": null
+    },
+    {
+      "case_id": "CASE-10",
+      "status": "failed",
+      "vbc": null,
+      "critical_findings": 0,
+      "runtime_seconds": 45.288,
+      "approximate_cost_usd": null
+    }
+  ]
+}

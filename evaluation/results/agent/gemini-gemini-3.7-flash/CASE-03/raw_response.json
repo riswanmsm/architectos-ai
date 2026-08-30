@@ -1,0 +1,304 @@
+{
+  "idea_summary": "A real-time collaborative whiteboard platform featuring private rooms, Conflict-free Replicated Data Type (CRDT) live drawing synchronization, seamless reconnect state recovery, point-in-time version history snapshots, and multi-format vector/raster export.",
+  "functional_requirements": [
+    {
+      "id": "FR-1",
+      "statement": "The system shall enforce role-based room membership authorization for creating, viewing, editing, and managing private whiteboard rooms.",
+      "acceptance_criteria": [
+        "Users without valid room membership invitations or tokens receive a 403 Forbidden status code on REST/WebSocket connection attempts.",
+        "Room owners can assign 'viewer', 'editor', or 'admin' roles to invitees with immediate propagation."
+      ]
+    },
+    {
+      "id": "FR-2",
+      "statement": "The system shall synchronize live drawing operations concurrently across all room participants using CRDT state mutation streams.",
+      "acceptance_criteria": [
+        "Concurrent stroke creations and modifications converge without state divergence across all connected peers within 100 milliseconds.",
+        "Operation sequence IDs and vector clocks are maintained to resolve conflicting node ordering."
+      ]
+    },
+    {
+      "id": "FR-3",
+      "statement": "The system shall support client reconnect recovery via delta-synchronization streams based on the client's last acknowledged sequence ID.",
+      "acceptance_criteria": [
+        "Reconnecting clients send their last sequence ID and receive compressed missing operation deltas without full-board reloads.",
+        "Clients offline longer than the ephemeral buffer threshold receive the latest compacted snapshot plus delta log."
+      ]
+    },
+    {
+      "id": "FR-4",
+      "statement": "The system shall persist chronological whiteboard history logs and capture incremental point-in-time snapshots for historical traversal.",
+      "acceptance_criteria": [
+        "Every stroke mutation is persisted to append-only storage with a timestamp and user ID.",
+        "Users can query and render any historical point-in-time whiteboard state."
+      ]
+    },
+    {
+      "id": "FR-5",
+      "statement": "The system shall export whiteboard contents into vector (SVG) and raster (PNG, PDF) formats.",
+      "acceptance_criteria": [
+        "Export engine generates valid SVG, PNG, and PDF outputs preserving all vector stroke data and color properties.",
+        "Export jobs complete and return downloadable binary artifacts within standard operational SLAs."
+      ]
+    }
+  ],
+  "non_functional_requirements": [
+    {
+      "id": "NFR-1",
+      "statement": "Real-time stroke broadcast latency shall remain minimal under nominal peak traffic.",
+      "target": "p99 stroke delivery latency < 50ms for rooms up to 50 active editors",
+      "verification_method": "Distributed WebSocket load testing simulating 50 concurrent editors per room emitting 30 events/second."
+    },
+    {
+      "id": "NFR-2",
+      "statement": "API Gateway and WebSocket edge infrastructure must enforce strict per-user and per-IP rate limits.",
+      "target": "Max 120 HTTP req/min per user; max 60 WS frames/sec per connection",
+      "verification_method": "Automated security test suites executing high-frequency bursting against REST and WebSocket endpoints."
+    },
+    {
+      "id": "NFR-3",
+      "statement": "Whiteboard mutation history retention and availability must adhere to high durability standards.",
+      "target": "99.999999999% (11 9s) object durability with 30-day delta log retention",
+      "verification_method": "Multi-region replicated blob and database storage audit alongside automated integrity verification tests."
+    }
+  ],
+  "architecture_components": [
+    {
+      "id": "COMP-1",
+      "name": "API Gateway & Edge Auth",
+      "responsibilities": [
+        "TLS termination and JWT OAuth2 validation",
+        "Token-bucket rate-limiting per client IP and authenticated user ID",
+        "Route proxying to downstream microservices and WebSocket gateway cluster"
+      ],
+      "requirement_ids": ["FR-1", "NFR-2"],
+      "entity_ids": ["ENT-1", "ENT-2"]
+    },
+    {
+      "id": "COMP-2",
+      "name": "Room & Access Control Service",
+      "responsibilities": [
+        "Manage room metadata, lifecycle, and access control policies",
+        "Generate and validate room session tokens and participant role assignments"
+      ],
+      "requirement_ids": ["FR-1"],
+      "entity_ids": ["ENT-1", "ENT-2", "ENT-3"]
+    },
+    {
+      "id": "COMP-3",
+      "name": "Real-Time Collaboration Engine",
+      "responsibilities": [
+        "Maintain active WebSocket connection state and publish-subscribe channels",
+        "Execute CRDT merge logic and sequence delta broadcasting",
+        "Handle reconnect synchronization handshakes and ephemeral delta buffering"
+      ],
+      "requirement_ids": ["FR-2", "FR-3", "NFR-1"],
+      "entity_ids": ["ENT-2", "ENT-4", "ENT-5"]
+    },
+    {
+      "id": "COMP-4",
+      "name": "History & Snapshot Service",
+      "responsibilities": [
+        "Persist append-only mutation events to relational/cold storage",
+        "Generate periodic compacted snapshots for quick catch-up and point-in-time time travel",
+        "Enforce history retention and pruning policies"
+      ],
+      "requirement_ids": ["FR-4", "NFR-3"],
+      "entity_ids": ["ENT-4", "ENT-5"]
+    },
+    {
+      "id": "COMP-5",
+      "name": "Export Processing Worker",
+      "responsibilities": [
+        "Reconstruct canvas vector trees at requested revision or snapshot",
+        "Render canvas to SVG, PNG, and PDF binary formats asynchronously"
+      ],
+      "requirement_ids": ["FR-5"],
+      "entity_ids": ["ENT-2", "ENT-5", "ENT-6"]
+    }
+  ],
+  "data_entities": [
+    {
+      "id": "ENT-1",
+      "name": "UserAccount",
+      "purpose": "Stores user identity, authentication credentials, profile data, and global permissions.",
+      "sensitive": true
+    },
+    {
+      "id": "ENT-2",
+      "name": "WhiteboardRoom",
+      "purpose": "Represents a collaborative whiteboard instance, privacy settings, and active configuration.",
+      "sensitive": false
+    },
+    {
+      "id": "ENT-3",
+      "name": "RoomMembership",
+      "purpose": "Maps users to rooms with assigned role permissions (admin, editor, viewer) and invitation tokens.",
+      "sensitive": true
+    },
+    {
+      "id": "ENT-4",
+      "name": "BoardMutationDelta",
+      "purpose": "Chronological immutable log of CRDT stroke/shape mutation events with sequence vectors.",
+      "sensitive": false
+    },
+    {
+      "id": "ENT-5",
+      "name": "BoardSnapshot",
+      "purpose": "Periodic compacted full-state vector snapshots of the whiteboard for fast recovery and time travel.",
+      "sensitive": false
+    },
+    {
+      "id": "ENT-6",
+      "name": "ExportArtifact",
+      "purpose": "Metadata and pre-signed storage URLs for generated vector and raster export files.",
+      "sensitive": false
+    }
+  ],
+  "api_operations": [
+    {
+      "id": "API-1",
+      "method": "POST",
+      "path": "/api/v1/rooms",
+      "purpose": "Create a new private whiteboard room and assign creator as owner.",
+      "public": false,
+      "authentication": "Bearer JWT",
+      "authorization": "Authenticated User",
+      "requirement_ids": ["FR-1"],
+      "entity_ids": ["ENT-2", "ENT-3"]
+    },
+    {
+      "id": "API-2",
+      "method": "POST",
+      "path": "/api/v1/rooms/{roomId}/members",
+      "purpose": "Add or invite a user to a private whiteboard room with designated role.",
+      "public": false,
+      "authentication": "Bearer JWT",
+      "authorization": "Room Admin",
+      "requirement_ids": ["FR-1"],
+      "entity_ids": ["ENT-2", "ENT-3"]
+    },
+    {
+      "id": "API-3",
+      "method": "GET",
+      "path": "/api/v1/rooms/{roomId}/sync",
+      "purpose": "Fetch snapshot and delta events for reconnect recovery starting from a given sequence ID.",
+      "public": false,
+      "authentication": "Bearer JWT",
+      "authorization": "Room Member (Viewer/Editor/Admin)",
+      "requirement_ids": ["FR-1", "FR-3"],
+      "entity_ids": ["ENT-2", "ENT-4", "ENT-5"]
+    },
+    {
+      "id": "API-4",
+      "method": "GET",
+      "path": "/api/v1/rooms/{roomId}/history",
+      "purpose": "Query historical snapshot states and mutation timeline between specified timestamps.",
+      "public": false,
+      "authentication": "Bearer JWT",
+      "authorization": "Room Member (Viewer/Editor/Admin)",
+      "requirement_ids": ["FR-1", "FR-4"],
+      "entity_ids": ["ENT-2", "ENT-4", "ENT-5"]
+    },
+    {
+      "id": "API-5",
+      "method": "POST",
+      "path": "/api/v1/rooms/{roomId}/exports",
+      "purpose": "Initiate an export job to render the whiteboard into SVG, PNG, or PDF format.",
+      "public": false,
+      "authentication": "Bearer JWT",
+      "authorization": "Room Member (Viewer/Editor/Admin)",
+      "requirement_ids": ["FR-1", "FR-5"],
+      "entity_ids": ["ENT-2", "ENT-6"]
+    }
+  ],
+  "tests": [
+    {
+      "id": "TEST-1",
+      "kind": "security",
+      "description": "Attempt to access private room REST endpoints and WebSocket channels without valid token or membership, asserting 401 Unauthorized or 403 Forbidden.",
+      "requirement_ids": ["FR-1", "NFR-2"],
+      "api_operation_ids": ["API-2", "API-3", "API-4", "API-5"],
+      "negative": true
+    },
+    {
+      "id": "TEST-2",
+      "kind": "integration",
+      "description": "Simulate two concurrent clients mutating overlapping whiteboard elements; verify CRDT convergence to identical state on both clients.",
+      "requirement_ids": ["FR-2"],
+      "api_operation_ids": ["API-3"],
+      "negative": false
+    },
+    {
+      "id": "TEST-3",
+      "kind": "integration",
+      "description": "Simulate abrupt client disconnect during active drawing stream, re-establish connection with last acked sequence ID, and assert exact delta catch-up.",
+      "requirement_ids": ["FR-3"],
+      "api_operation_ids": ["API-3"],
+      "negative": false
+    },
+    {
+      "id": "TEST-4",
+      "kind": "integration",
+      "description": "Verify history log ingestion and point-in-time canvas reconstruction against historical sequence markers.",
+      "requirement_ids": ["FR-4", "NFR-3"],
+      "api_operation_ids": ["API-4"],
+      "negative": false
+    },
+    {
+      "id": "TEST-5",
+      "kind": "e2e",
+      "description": "Trigger whiteboard export across SVG, PNG, and PDF formats and validate generated binary image checksum and vector element integrity.",
+      "requirement_ids": ["FR-5"],
+      "api_operation_ids": ["API-5"],
+      "negative": false
+    },
+    {
+      "id": "TEST-6",
+      "kind": "performance",
+      "description": "Load test API Gateway and WebSocket cluster to ensure p99 broadcast latency stays under 50ms with 50 concurrent editors per room.",
+      "requirement_ids": ["NFR-1", "NFR-2"],
+      "api_operation_ids": ["API-3"],
+      "negative": false
+    }
+  ],
+  "obligation_coverage": [
+    {
+      "obligation_id": "room_membership_authorization",
+      "design_response": "Implemented RBAC checks at Gateway and Room Access Control service verifying JWT and RoomMembership record before granting access to HTTP endpoints or WebSocket rooms.",
+      "evidence_ids": ["FR-1", "COMP-1", "COMP-2", "ENT-3", "API-1", "API-2", "TEST-1"]
+    },
+    {
+      "obligation_id": "concurrent_edit_strategy",
+      "design_response": "Utilized state-based and operation-based CRDT structures with vector clocks handled by the Real-Time Collaboration Engine to achieve deterministic conflict-free convergence.",
+      "evidence_ids": ["FR-2", "COMP-3", "ENT-4", "TEST-2"]
+    },
+    {
+      "obligation_id": "reconnect_recovery",
+      "design_response": "Engineered sequence-ID-based delta synchronization protocol allowing disconnected clients to request missed operation logs or fallback to latest snapshot + delta.",
+      "evidence_ids": ["FR-3", "COMP-3", "API-3", "TEST-3"]
+    },
+    {
+      "obligation_id": "history_retention",
+      "design_response": "Persisted immutable mutation streams to append-only durable storage paired with periodic background snapshot compaction and point-in-time query APIs.",
+      "evidence_ids": ["FR-4", "NFR-3", "COMP-4", "ENT-4", "ENT-5", "API-4", "TEST-4"]
+    },
+    {
+      "obligation_id": "unauthorized_room_access_test",
+      "design_response": "Executed dedicated negative security integration test suite asserting 401/403 responses when non-members or unauthenticated actors attempt access.",
+      "evidence_ids": ["TEST-1", "API-2", "API-3", "API-4", "API-5", "COMP-1"]
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "ASM-1",
+      "statement": "Ephemeral delta memory buffers in the collaboration engine will retain up to 10,000 recent operations per room before requiring a snapshot hydration for reconnecting clients.",
+      "needs_human_review": true
+    },
+    {
+      "id": "ASM-2",
+      "statement": "Vector and raster export jobs exceeding 10MB or 50,000 canvas elements are processed asynchronously via message queue workers rather than synchronously in the API Gateway.",
+      "needs_human_review": false
+    }
+  ]
+}

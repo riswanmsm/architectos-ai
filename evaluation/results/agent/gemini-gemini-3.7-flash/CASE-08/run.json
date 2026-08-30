@@ -1,0 +1,608 @@
+{
+  "evaluation_version": "1.0.0",
+  "prompt_version": "agent-workflow-v1.0.0",
+  "case_id": "CASE-08",
+  "workflow": "multi_agent_verified_orchestrator",
+  "provider": "gemini",
+  "model": "gemini-3.7-flash",
+  "started_at": "2026-08-30T00:52:57.034087+00:00",
+  "status": "completed",
+  "runtime_seconds": 14.949,
+  "input_tokens": 355,
+  "output_tokens": 2280,
+  "approximate_cost_usd": 0.00881625,
+  "request_id": "6X6TavmJI470g8UPq_ic0Qo",
+  "score": {
+    "scorer_version": "1.0.1",
+    "case_id": "CASE-08",
+    "passed_checks": 82,
+    "total_checks": 83,
+    "verified_blueprint_coverage": 98.8,
+    "ready": true,
+    "critical_findings": [],
+    "checks": [
+      {
+        "rule_id": "VBC-01",
+        "subject_id": "FR-1",
+        "passed": true,
+        "evidence": "implementation links: COMP-1, COMP-2, COMP-3, API-1, API-4",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-02",
+        "subject_id": "FR-1",
+        "passed": true,
+        "evidence": "test links: TEST-1",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-01",
+        "subject_id": "FR-2",
+        "passed": true,
+        "evidence": "implementation links: COMP-2, COMP-3, API-2, API-3, API-4",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-02",
+        "subject_id": "FR-2",
+        "passed": true,
+        "evidence": "test links: TEST-2",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-01",
+        "subject_id": "FR-3",
+        "passed": true,
+        "evidence": "implementation links: COMP-3, API-2, API-3",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-02",
+        "subject_id": "FR-3",
+        "passed": true,
+        "evidence": "test links: TEST-3",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-01",
+        "subject_id": "FR-4",
+        "passed": true,
+        "evidence": "implementation links: COMP-4, API-5",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-02",
+        "subject_id": "FR-4",
+        "passed": true,
+        "evidence": "test links: TEST-4",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-01",
+        "subject_id": "FR-5",
+        "passed": true,
+        "evidence": "implementation links: COMP-4, API-1, API-5",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-02",
+        "subject_id": "FR-5",
+        "passed": false,
+        "evidence": "test links: none",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-03",
+        "subject_id": "API-1",
+        "passed": true,
+        "evidence": "authentication and authorization declared",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-03",
+        "subject_id": "API-2",
+        "passed": true,
+        "evidence": "authentication and authorization declared",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-03",
+        "subject_id": "API-3",
+        "passed": true,
+        "evidence": "authentication and authorization declared",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-03",
+        "subject_id": "API-4",
+        "passed": true,
+        "evidence": "authentication and authorization declared",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-04",
+        "subject_id": "COMP-1->ENT-1",
+        "passed": true,
+        "evidence": "entity reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-04",
+        "subject_id": "COMP-1->ENT-2",
+        "passed": true,
+        "evidence": "entity reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-04",
+        "subject_id": "COMP-2->ENT-1",
+        "passed": true,
+        "evidence": "entity reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-04",
+        "subject_id": "COMP-2->ENT-2",
+        "passed": true,
+        "evidence": "entity reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-04",
+        "subject_id": "COMP-2->ENT-3",
+        "passed": true,
+        "evidence": "entity reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-04",
+        "subject_id": "COMP-3->ENT-1",
+        "passed": true,
+        "evidence": "entity reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-04",
+        "subject_id": "COMP-3->ENT-2",
+        "passed": true,
+        "evidence": "entity reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-04",
+        "subject_id": "COMP-3->ENT-3",
+        "passed": true,
+        "evidence": "entity reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-04",
+        "subject_id": "COMP-3->ENT-4",
+        "passed": true,
+        "evidence": "entity reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-04",
+        "subject_id": "COMP-4->ENT-1",
+        "passed": true,
+        "evidence": "entity reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-04",
+        "subject_id": "COMP-4->ENT-5",
+        "passed": true,
+        "evidence": "entity reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-04",
+        "subject_id": "COMP-4->ENT-6",
+        "passed": true,
+        "evidence": "entity reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-04",
+        "subject_id": "API-1->ENT-1",
+        "passed": true,
+        "evidence": "entity reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-04",
+        "subject_id": "API-1->ENT-2",
+        "passed": true,
+        "evidence": "entity reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-04",
+        "subject_id": "API-1->ENT-3",
+        "passed": true,
+        "evidence": "entity reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-04",
+        "subject_id": "API-2->ENT-2",
+        "passed": true,
+        "evidence": "entity reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-04",
+        "subject_id": "API-2->ENT-4",
+        "passed": true,
+        "evidence": "entity reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-04",
+        "subject_id": "API-3->ENT-3",
+        "passed": true,
+        "evidence": "entity reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-04",
+        "subject_id": "API-3->ENT-4",
+        "passed": true,
+        "evidence": "entity reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-04",
+        "subject_id": "API-4->ENT-1",
+        "passed": true,
+        "evidence": "entity reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-04",
+        "subject_id": "API-4->ENT-2",
+        "passed": true,
+        "evidence": "entity reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-04",
+        "subject_id": "API-5->ENT-5",
+        "passed": true,
+        "evidence": "entity reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-04",
+        "subject_id": "API-5->ENT-6",
+        "passed": true,
+        "evidence": "entity reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-05",
+        "subject_id": "NFR-1",
+        "passed": true,
+        "evidence": "objective target and explicit verification method declared",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-05",
+        "subject_id": "NFR-2",
+        "passed": true,
+        "evidence": "objective target and explicit verification method declared",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-05",
+        "subject_id": "NFR-3",
+        "passed": true,
+        "evidence": "objective target and explicit verification method declared",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "COMP-1->FR-1",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "COMP-1->NFR-1",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "COMP-1->NFR-3",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "COMP-2->FR-1",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "COMP-2->FR-2",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "COMP-2->NFR-3",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "COMP-3->FR-1",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "COMP-3->FR-2",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "COMP-3->FR-3",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "COMP-4->FR-4",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "COMP-4->FR-5",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "COMP-4->NFR-2",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "API-1->FR-1",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "API-1->FR-5",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "API-2->FR-2",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "API-2->FR-3",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "API-3->FR-2",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "API-3->FR-3",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "API-4->FR-1",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "API-4->FR-2",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "API-4->NFR-2",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "API-5->FR-4",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "API-5->FR-5",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "TEST-1->FR-1",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "TEST-1->NFR-3",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "TEST-1->API-4",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "TEST-2->FR-2",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "TEST-2->API-2",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "TEST-3->FR-3",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "TEST-3->API-3",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "TEST-4->FR-4",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "TEST-4->API-5",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "TEST-5->NFR-2",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "TEST-5->API-4",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "TEST-6->NFR-1",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "TEST-6->API-5",
+        "passed": true,
+        "evidence": "reference resolves",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-07",
+        "subject_id": "negative-security-coverage",
+        "passed": true,
+        "evidence": "negative security tests: TEST-1, TEST-2, TEST-3, TEST-6",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-08",
+        "subject_id": "tenant_data_isolation",
+        "passed": true,
+        "evidence": "evidence links: FR-1, COMP-1, COMP-2, ENT-1, ENT-2, API-4, TEST-1",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-08",
+        "subject_id": "workspace_role_authorization",
+        "passed": true,
+        "evidence": "evidence links: FR-2, COMP-2, ENT-3, API-2, API-3, TEST-2",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-08",
+        "subject_id": "invitation_expiration",
+        "passed": true,
+        "evidence": "evidence links: FR-3, COMP-3, ENT-4, API-2, API-3, TEST-3",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-08",
+        "subject_id": "billing_webhook_idempotency",
+        "passed": true,
+        "evidence": "evidence links: FR-4, COMP-4, ENT-6, API-5, TEST-4",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-08",
+        "subject_id": "cross_tenant_access_test",
+        "passed": true,
+        "evidence": "evidence links: FR-1, TEST-1, API-4",
+        "critical": false
+      },
+      {
+        "rule_id": "VBC-06",
+        "subject_id": "unique-identifiers",
+        "passed": true,
+        "evidence": "duplicate identifiers: none",
+        "critical": false
+      }
+    ]
+  },
+  "finished_at": "2026-08-30T00:53:11.998716+00:00"
+}

@@ -1,0 +1,26 @@
+You are the ArchitectOS Lead Systems Architect orchestrating a multi-agent engineering committee (Requirements, Architecture, Data, Integration, Testing, Risk Verification).
+
+Generate a complete, fully cross-referenced, production-grade engineering blueprint for the application idea below.
+
+Application Idea:
+A global project workspace with organization-scoped documents, real-time co-editing, offline edits, regional data residency, external guests, and immutable audit history.
+
+Mandatory Case Obligations:
+- tenant_and_guest_authorization
+- concurrent_edit_strategy
+- offline_conflict_resolution
+- regional_data_residency
+- immutable_audit_history
+- revoked_guest_offline_write_test
+- cross_region_failure_test
+
+Strict Engineering Contract:
+1. Requirements: Define functional (FR-1, FR-2, ...) and non-functional requirements (NFR-1, ...) with measurable numeric targets and explicit verification methods.
+2. Architecture: Define components (COMP-1, COMP-2, ...) linking directly to requirement IDs and entity IDs. Include robust authentication and API Gateway rate-limiting.
+3. Data Models: Define relational entities (ENT-1, ENT-2, ...) with data sensitivity flags.
+4. API Contracts: Define operations (API-1, API-2, ...) with exact methods, paths, requirement links, entity links, and OAuth2/JWT security definitions.
+5. Test Matrix: Define unit, integration, performance, and negative security tests (TEST-1, ...) with negative=True for auth/rate-limit rejection.
+6. Obligation Coverage: Provide explicit design responses and evidence IDs linking requirements, components, APIs, and tests for every declared obligation.
+7. Assumptions: Record any trade-offs needing human review (ASM-1, ...).
+
+Return the verified envelope matching the required Blueprint JSON schema.

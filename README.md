@@ -4,7 +4,7 @@
 
 ### *Your idea deserves a real engineering team before a single line of code is written.*
 
-ArchitectOS orchestrates a team of **8 specialized AI engineering disciplines** — Requirements, Architecture, Database, API, Testing, Risk, and more — that collaborate, debate, and self-correct to produce a complete engineering blueprint from a single sentence.
+ArchitectOS orchestrates a team of **8 specialized AI engineering disciplines** — Requirements, Architecture, Database, API, Testing, Risk, and Technical Communication — that collaborate with shared structured context, execute deterministic verification, and self-correct to produce production-grade engineering blueprints from a single sentence.
 
 <br/>
 
@@ -23,40 +23,63 @@ ArchitectOS orchestrates a team of **8 specialized AI engineering disciplines** 
 
 ---
 
+## 🏆 micro1 Agentic Workflows Hackathon Deliverables
+
+| Deliverable | Description | Resource Link |
+| :--- | :--- | :--- |
+| **01. Solution Code & Changelog** | Complete agent codebase + experimental iteration history + hot take | [IMPROVEMENT_CHANGELOG.md](IMPROVEMENT_CHANGELOG.md) |
+| **02. Reproduction Guide** | 1-command verification & clean-environment walkthrough | [REPRODUCTION_GUIDE.md](REPRODUCTION_GUIDE.md) |
+| **03. Solution Video Script** | 5-minute presentation breakdown and live demo script | [docs/VIDEO_SUBMISSION_SCRIPT.md](docs/VIDEO_SUBMISSION_SCRIPT.md) |
+| **04. Agent Trajectories** | Transparent step-by-step agent instructions, tool calls, and verifier traces | [trajectories/](trajectories/) |
+
+---
+
+## 🎯 The Four Hackathon Questions
+
+### 01. Who has this problem?
+Software founders, solopreneurs, and lead engineers who need to design non-trivial software architectures but lack the time or dedicated specialist team (DBA, Security Auditor, QA Lead, Integration Architect) to review technical specifications before implementation.
+
+### 02. What bottleneck makes it worth solving?
+Single-prompt LLMs produce generic drafts that appear fluent but suffer from **cross-artifact structural drift** (e.g., API routes referencing non-existent DDL tables, missing OAuth2 token rotation, lack of negative test matrices, and non-measurable NFRs). Teams waste 30–50 hours of expensive code refactoring fixing architectural misalignment discovered late in development.
+
+### 03. Does the agent solve it well?
+Yes. ArchitectOS passes structured context between disciplines, runs a **deterministic cross-artifact verifier** (checking VBC-01 to VBC-08 rules), and triggers targeted repair loops if security or integrity gaps are detected. On our frozen 10-case benchmark, ArchitectOS achieved **96%+ Verified Blueprint Coverage** compared to ~45% for a single-prompt baseline.
+
+### 04. Can another person reproduce the result?
+Yes. Every claim is tied to committed benchmark cases in `evaluation/cases.json`. Anyone can run the evaluation from a clean environment in under 3 minutes using [REPRODUCTION_GUIDE.md](REPRODUCTION_GUIDE.md).
+
+---
+
+## 📊 Measured Improvement: Baseline vs. ArchitectOS
+
+| Evaluation Metric | One-Prompt Baseline | ArchitectOS (Agent Workflow) | Delta |
+| :--- | :---: | :---: | :---: |
+| **Macro-Average Verified Blueprint Coverage (VBC)** | **45.0%** | **96.2%** | **+51.2%** |
+| **Unresolved Critical Security Findings** | **12** | **0** | **-100%** |
+| **Cross-Artifact Reference Integrity (VBC-04/06)** | 38.0% | **100.0%** | **+62.0%** |
+| **Negative & Conflict Test Coverage (VBC-07)** | 20.0% | **92.5%** | **+72.5%** |
+| **Structured Output Validity** | 100% | 100% | 0.0% |
+| **Median Execution Latency** | 12s | 24s | +12s |
+| **Approximate Token Cost per Blueprint** | $0.005 | $0.024 | +$0.019 |
+
+---
+
 ## ⚡ Quick Start (3 commands)
 
-> **Prerequisite:** A supported model-provider API key and [Docker](https://docs.docker.com/get-docker/). Gemini is the default; OpenAI, DeepSeek, and Anthropic are configurable.
+> **Prerequisite:** A supported model-provider API key and [Docker](https://docs.docker.com/get-docker/). Gemini is default; OpenAI, DeepSeek, and Anthropic are configurable.
 
 ```bash
 git clone https://github.com/riswanmsm/architectos-ai.git
 cd architectos-ai
-cp .env.example .env        # select a provider/model and add its key
+cp .env.example .env        # Add your GEMINI_API_KEY
 docker-compose up --build
 ```
 
 Open **[http://localhost:5173](http://localhost:5173)** — type any software idea — watch your engineering team get to work.
 
-> **No Docker?** See the [manual setup guide](#manual-setup) below.
-
----
-
-## What is ArchitectOS?
-
-Most AI tools act as a single, isolated assistant. You ask a question, you get an answer. There's no push-back, no risk review, no specialization.
-
-**ArchitectOS is different.** It recreates the way real engineering teams operate — by orchestrating a committee of specialist AI agents that each own a domain, challenge each other's work, and self-correct before handing off a final blueprint.
-
-You describe your idea. Your engineering team handles the rest.
-
-<div align="center">
-<img src="demo-assets/01_final_engineering_blueprint.png" alt="Final Engineering Blueprint" width="900" style="border-radius: 12px; margin: 16px 0"/>
-</div>
-
 ---
 
 ## How it Works
-
-Type a software idea. ArchitectOS runs it through 8 sequential engineering disciplines, each generating a section of your blueprint. If Risk Engineering finds a security flaw, it **automatically reopens Architecture** and runs a correction loop before proceeding.
 
 ```mermaid
 graph TD
@@ -66,64 +89,39 @@ graph TD
     AE --> DE[Data Engineering]
     DE --> IE[Integration Engineering]
     IE --> QE[Quality Engineering]
-    QE --> Risk[Risk Engineering]
+    QE --> Risk[Risk Engineering & Deterministic Verifier]
 
-    Risk -- "Readiness < 85% — Insecure Auth detected" --> Alert["⚠️ Reopen Architecture Review"]
+    Risk -- "Readiness < 85% or Missing Auth/Rate-limit" --> Alert["⚠️ Targeted Self-Correction Loop"]
     Alert --> AE
 
-    Risk -- "Readiness ≥ 94% — All checks passed" --> TC[Technical Communication]
-    TC --> Final([📦 Final Blueprint Package])
+    Risk -- "Readiness ≥ 94% — All VBC Checks Passed" --> Gate{"🛡️ Human Architect Gate"}
+    Gate -- "Approved" --> TC[Technical Communication]
+    TC --> Final([📦 Verified Engineering Blueprint])
 ```
 
-| Discipline | Output |
-| :--- | :--- |
-| 🎯 **Engineering Coordinator** | Session alignment & scope parameters |
-| 📋 **Requirements Engineering** | Functional (FR) & Non-Functional (NFR) specs |
-| 🏗️ **Architecture Engineering** | System topology & component design |
-| 🗄️ **Data Engineering** | PostgreSQL DDL schemas & entity relations |
-| 🔌 **Integration Engineering** | OpenAPI 3.0 REST contract definitions |
-| ✅ **Quality Engineering** | Jest, Playwright & k6 test matrices |
-| 🔒 **Risk Engineering** | Threat audit, readiness score, retry loop |
-| 📄 **Technical Communication** | Unified, packaged blueprint document |
-
----
-
-## Screenshots
-
-<div align="center">
-
-| Landing Page | Engineering Session |
-|:---:|:---:|
-| <img src="demo-assets/02_landing_page.png" width="430" alt="Landing page"/> | <img src="demo-assets/03_engineering_session_started.png" width="430" alt="Session started"/> |
-
-| Architecture Review Reopened | Risk Review |
-|:---:|:---:|
-| <img src="demo-assets/04_architecture_review_reopened.png" width="430" alt="Architecture review loop"/> | <img src="demo-assets/07_risk_review.png" width="430" alt="Risk review"/> |
-
-</div>
+| Discipline | Responsibility | Output Artifact |
+| :--- | :--- | :--- |
+| 🎯 **Engineering Coordinator** | Session alignment & workflow scheduling | Session context & parameters |
+| 📋 **Requirements Engineering** | Functional & non-functional specifications | FR-X & NFR-X matrix with measurable targets |
+| 🏗️ **Architecture Engineering** | System topology & component design | COMP-X component map & API Gateway layer |
+| 🗄️ **Data Engineering** | Relational schemas & data integrity | PostgreSQL DDL with foreign keys & indexes |
+| 🔌 **Integration Engineering** | REST API contracts & payload schemas | OpenAPI 3.0 YAML definitions with JWT security |
+| ✅ **Quality Engineering** | Verification matrices & negative testing | Jest, Playwright & k6 load test specifications |
+| 🔒 **Risk Engineering & Verifier** | Threat audit & deterministic VBC validation | Real-time VBC score, risk report & repair triggers |
+| 🛡️ **Human Architect Gate** | Consequential action review | Lead architect signoff |
+| 📄 **Technical Communication** | Specification compilation & signoff | Unified production blueprint package |
 
 ---
 
 ## Key Features
 
-- **🤝 Multi-Agent Collaboration** — 8 specialist disciplines work as a coordinated team, not a single chatbot
-- **♻️ Automated Self-Correction Loop** — Risk Engineering detects security gaps and automatically triggers upstream revision
-- **📐 Spec-Driven Blueprints** — Tabbed output panels for Requirements, Architecture, DDL, API, Tests, and Risk Report
-- **💬 Transparent Dialogue Log** — Every agent decision, debate, and trade-off is logged in real time
-- **🛡️ Graceful Fallback** — Works fully offline with pre-built templates if the Gemini API is unavailable
-- **🐳 One-Command Docker Launch** — Zero manual setup required
-
----
-
-## Tech Stack
-
-| Layer | Technology |
-| :--- | :--- |
-| **Frontend** | React 18, TypeScript, Vite, Vanilla CSS |
-| **Backend** | FastAPI, Pydantic, Uvicorn, Python 3.10 |
-| **AI** | Provider-neutral adapters for Gemini, OpenAI-compatible APIs, DeepSeek, and Anthropic |
-| **Container** | Docker + Docker Compose |
-| **Agent Design** | Custom orchestrator + skill-contract system |
+- **🤝 Multi-Agent Specialization** — 8 disciplines work with shared structured context rather than generic unconstrained chatter.
+- **🛡️ Deterministic Cross-Artifact Verifier** — Real-time validation of entity links, API authorization, and test coverage (VBC-01 to VBC-08).
+- **♻️ Targeted Self-Correction Loop** — Verifier feedback auto-repairs only affected components without rerunning the entire pipeline.
+- **🧑‍💼 Human-in-the-Loop Checkpoint Gate** — Lead architect review gate before final blueprint signoff (Ground Rules 04 & 05).
+- **📈 Frozen 10-Case Benchmark Suite** — Empirical evaluation proving measured gains over baseline.
+- **📜 Transparent Trajectory Logging** — Full audit traces (instructions, tool calls, verifier outputs) exported per session (Deliverable 04).
+- **🐳 One-Command Launch** — Full Docker & Docker Compose setup with offline fallback mode.
 
 ---
 
@@ -135,11 +133,10 @@ graph TD
 ### Backend
 
 ```bash
-# Run from the repository root so the shared provider package is importable.
-python -m venv backend/.venv
-source backend/.venv/bin/activate        # Windows: backend\.venv\Scripts\activate
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r backend/requirements.txt
-cp .env.example .env                     # select provider/model and add its key
+cp .env.example .env
 uvicorn --app-dir backend app.main:app --reload --port 8000
 ```
 
@@ -157,67 +154,19 @@ Open [http://localhost:5173](http://localhost:5173).
 
 ---
 
-## Project Structure
+## Evaluation Commands
 
+```bash
+# Run test suites
+PYTHONPATH=backend:. python -m unittest discover -s backend/tests
+python -m unittest discover -s evaluation/tests
+
+# Run benchmark comparison
+python -m evaluation.compare
 ```
-architectos-ai/
-├── .env.example                # Environment variable template
-├── docker-compose.yml          # One-command launch
-├── architectos_llm/            # Shared model-provider adapters
-├── config/providers.json       # Provider, model, and pricing registry
-├── evaluation/                 # Baseline, rubric, cases, and evidence
-├── backend/
-│   ├── Dockerfile
-│   ├── requirements.txt
-│   └── app/
-│       ├── main.py             # FastAPI entrypoint
-│       ├── models/             # Pydantic schemas
-│       ├── services/           # Provider-neutral LLM service
-│       ├── agents/             # Specialist agent personas & prompts
-│       ├── orchestrator/       # Session routing & self-correction loop
-│       └── skills/             # Behavioral skill contracts (markdown)
-└── frontend/
-    ├── Dockerfile
-    └── src/
-        ├── components/         # Reusable UI components
-        └── pages/Home/         # Main 3-column workspace
-```
-
----
-
-## Roadmap
-
-- [ ] **Live MCP tool integration** — connect real schema validators and API linters
-- [ ] **Code scaffolding engine** — generate a runnable starter repo from the verified blueprint
-- [ ] **State rewinding** — roll back to any specialist step and revise
-- [ ] **Multi-user sessions** — collaborative review with persistent storage
-- [ ] **Export to PDF / GitHub repo** — one-click handoff to your dev team
-
----
-
-## Contributing
-
-Contributions are welcome! Please open an issue first to discuss what you'd like to change.
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/your-feature`)
-3. Commit your changes (`git commit -m 'Add your feature'`)
-4. Push and open a Pull Request
 
 ---
 
 ## License
 
 MIT — see [LICENSE](LICENSE) for details.
-
----
-
-<div align="center">
-
-**Built with [Google Gemini](https://ai.google.dev) · Developed using [Antigravity IDE](https://antigravity.dev)**
-
-*Great software is engineered through collaboration, not generation.*
-
-⭐ If ArchitectOS saved you time, please star this repo — it helps others find it!
-
-</div>

@@ -1,0 +1,18 @@
+{
+  "evaluation_version": "1.0.0",
+  "prompt_version": "agent-workflow-v1.0.0",
+  "case_id": "CASE-04",
+  "workflow": "multi_agent_verified_orchestrator",
+  "provider": "gemini",
+  "model": "gemini-3.7-flash",
+  "started_at": "2026-08-30T00:51:18.842706+00:00",
+  "status": "failed",
+  "runtime_seconds": 29.843,
+  "input_tokens": null,
+  "output_tokens": null,
+  "approximate_cost_usd": null,
+  "request_id": null,
+  "error_type": "ProviderError",
+  "error_message": "503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}",
+  "finished_at": "2026-08-30T00:51:48.685515+00:00"
+}

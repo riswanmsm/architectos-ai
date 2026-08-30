@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel, Field
 
 class ProjectIdea(BaseModel):
@@ -28,3 +29,11 @@ class StepRequest(BaseModel):
         ..., 
         description="The project idea to guide the specialist's analysis."
     )
+
+class HumanApprovalRequest(BaseModel):
+    """
+    Schema representing human architect review approval/rejection (Ground Rules 04 & 05).
+    """
+    session_id: str = Field(..., description="The unique session identifier.")
+    approved: bool = Field(..., description="Whether the human architect approved the design.")
+    notes: Optional[str] = Field(default=None, description="Optional reviewer notes or feedback.")
