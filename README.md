@@ -119,9 +119,12 @@ graph TD
 - **🛡️ Deterministic Cross-Artifact Verifier** — Real-time validation of entity links, API authorization, and test coverage (VBC-01 to VBC-08).
 - **♻️ Targeted Self-Correction Loop** — Verifier feedback auto-repairs only affected components without rerunning the entire pipeline.
 - **🧑‍💼 Human-in-the-Loop Checkpoint Gate** — Lead architect review gate before final blueprint signoff (Ground Rules 04 & 05).
+- **📂 Native `.kiro/specs/` Exporter** — Formats and downloads complete specification packages directly for [Kiro & Spec-Driven Development](docs/KIRO_SDD_INTEGRATION.md).
+- **🔌 Model Context Protocol (MCP) Server** — Embeds ArchitectOS specialist tools directly into Kiro, Cursor, and IDEs via JSON-RPC.
 - **📈 Frozen 10-Case Benchmark Suite** — Empirical evaluation proving measured gains over baseline.
 - **📜 Transparent Trajectory Logging** — Full audit traces (instructions, tool calls, verifier outputs) exported per session (Deliverable 04).
 - **🐳 One-Command Launch** — Full Docker & Docker Compose setup with offline fallback mode.
+
 
 ---
 

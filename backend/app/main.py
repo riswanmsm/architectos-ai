@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.models.schemas import ProjectIdea, StepRequest, HumanApprovalRequest
@@ -7,12 +7,18 @@ from app.orchestrator.coordinator import (
     execute_step_instance,
     record_human_approval,
     export_session_trajectory,
+    sessions,
 )
+from app.orchestrator.kiro_exporter import (
+    format_kiro_specs,
+    create_kiro_zip_archive,
+)
+from app.mcp.server import mcp_router
 
 # FastAPI App setup
 app = FastAPI(
-    title="ArchitectOS Engineering Coordinator API",
-    description="Orchestrates engineering workflow pipelines, deterministic cross-artifact verification, and human review gates.",
+    title="ArchitectOS Engineering Coordinator & MCP Server API",
+    description="Orchestrates engineering workflow pipelines, deterministic cross-artifact verification, human review gates, and .kiro/specs/ export.",
     version="1.0.0"
 )
 
@@ -25,6 +31,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Mount Model Context Protocol (MCP) router for Kiro and IDE integrations
+app.include_router(mcp_router)
+
 
 @app.get("/")
 def health_check():
@@ -35,7 +44,8 @@ def health_check():
     return {
         "status": "ok", 
         "service": "ArchitectOS Coordinator Engine",
-        "version": "1.0.0"
+        "version": "1.0.0",
+        "mcp_enabled": True
     }
 
 
@@ -72,3 +82,37 @@ def get_trajectory(session_id: str):
     Fetches full agent execution trajectory logs for auditability (Deliverable 04).
     """
     return export_session_trajectory(session_id)
+
+
+@app.get("/api/session/{session_id}/export/kiro")
+def export_kiro_bundle(session_id: str):
+    """
+    Exports the verified session blueprint formatted directly for .kiro/specs/.
+    """
+    if session_id not in sessions:
+        raise HTTPException(status_code=404, detail="Session not found.")
+    session = sessions[session_id]
+    specs = format_kiro_specs(session.get("artifacts", {}), session.get("verifier_result"))
+    return {
+        "session_id": session_id,
+        "idea": session.get("idea"),
+        "kiro_specs": specs
+    }
+
+
+@app.get("/api/session/{session_id}/export/kiro/zip")
+def download_kiro_zip(session_id: str):
+    """
+    Downloads a ready-to-unzip .kiro/specs/ archive for direct placement into any repository root.
+    """
+    if session_id not in sessions:
+        raise HTTPException(status_code=404, detail="Session not found.")
+    session = sessions[session_id]
+    specs = format_kiro_specs(session.get("artifacts", {}), session.get("verifier_result"))
+    zip_buffer = create_kiro_zip_archive(specs)
+    
+    return Response(
+        content=zip_buffer.getvalue(),
+        media_type="application/zip",
+        headers={"Content-Disposition": f"attachment; filename=architectos-kiro-specs-{session_id[:8]}.zip"}
+    )

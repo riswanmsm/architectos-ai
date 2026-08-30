@@ -72,13 +72,15 @@ def execute_step_instance(req: StepRequest) -> Dict[str, Any]:
     # Gather dialog logs
     dialogue = get_specialist_dialogue(step_id, idea, feedback=feedback)
 
-    # Generate document specifications with upstream shared context
-    blueprint_content = generate_specialist_blueprint(
+    # Generate document specifications with upstream shared context & domain tools
+    gen_result = generate_specialist_blueprint(
         step_id,
         idea,
         context=artifacts,
         feedback=feedback
     )
+    blueprint_content = gen_result["content"]
+    tool_validation = gen_result.get("tool_validation")
 
     # Save to session artifacts store
     artifacts[active_tab] = blueprint_content
@@ -142,7 +144,8 @@ def execute_step_instance(req: StepRequest) -> Dict[str, Any]:
         "readiness_score": readiness_score,
         "risk_details": risk_details,
         "active_tab": active_tab,
-        "verifier_summary": session.get("verifier_result")
+        "verifier_summary": session.get("verifier_result"),
+        "tool_validation": tool_validation
     }
 
 
