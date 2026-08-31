@@ -1,6 +1,8 @@
 import json
 import os
+import re
 from dataclasses import dataclass
+
 from pathlib import Path
 from typing import Any, Literal, Protocol
 from urllib.error import HTTPError, URLError
@@ -231,6 +233,11 @@ class OpenAICompatibleProvider:
             raise ProviderError("OpenAI-compatible provider returned no message content.") from exc
         if not isinstance(raw_text, str) or not raw_text.strip():
             raise ProviderError("OpenAI-compatible provider returned empty message content.")
+        
+        # Strip potential markdown fences from raw output
+        raw_text = re.sub(r"^```(?:json)?\s*\n?", "", raw_text.strip())
+        raw_text = re.sub(r"\n?```\s*$", "", raw_text).strip()
+
         usage = payload.get("usage") or {}
         return ProviderResult(
             raw_text=raw_text,
@@ -249,12 +256,16 @@ class OpenAICompatibleProvider:
                 "json_schema": {
                     "name": "architectos_blueprint",
                     "strict": True,
-                    "schema": schema.model_json_schema(),
+                    "schema": _without_schema_keywords(
+                        schema.model_json_schema(),
+                        {"additionalProperties"},
+                    ),
                 },
             }
         else:
             response_format = {"type": "json_object"}
         return self._generate(prompt, response_format)
+
 
 
 class AnthropicProvider:
@@ -331,9 +342,13 @@ def create_provider(settings: ProviderSettings) -> StructuredProvider:
     definition = settings.definition
     api_key = os.getenv(definition.key_env)
     if not api_key:
-        raise ProviderError(
-            f"{definition.key_env} is required for provider '{settings.provider_name}'."
-        )
+        if settings.provider_name == "ollama" or (definition.base_url and "11434" in definition.base_url):
+            api_key = "ollama"
+        else:
+            raise ProviderError(
+                f"{definition.key_env} is required for provider '{settings.provider_name}'."
+            )
+
     if definition.adapter == "gemini":
         return GeminiProvider(api_key, settings.model)
     if not definition.base_url:

@@ -1,0 +1,359 @@
+{
+  "application": {
+    "name": "Community Moderation Application",
+    "description": "A community application where members publish posts, report abuse, and moderators review reports and appeals.",
+    " Obligations": [
+      "moderator_role_authorization",
+      "reporter_privacy",
+      "moderation_audit_trail",
+      "appeal_state_machine",
+      "unauthorized_moderation_test"
+    ],
+    "Requirements": [
+      {
+        "ID": "FR-1",
+        "description": "Members can publish posts.",
+        "measurable_target": "95% of members publish posts within 12 hours of registration.",
+        "verification_method": "User engagement metrics and moderation feedback analysis."
+      },
+      {
+        "ID": "FR-2",
+        "description": "Members can report abuse.",
+        "measurable_target": "90% of reported issues are resolved within 24 hours.",
+        "verification_method": "Issue resolution time tracking and community feedback."
+      },
+      {
+        "ID": "FR-3",
+        "description": "Moderators can review reports.",
+        "measurable_target": "95% of reports are reviewed within 1 hour.",
+        "verification_method": "Moderation dashboard analytics and review time tracking."
+      },
+      {
+        "ID": "FR-4",
+        "description": "Moderators can appeal decisions.",
+        "measurable_target": "90% of appeals are resolved within 48 hours.",
+        "verification_method": "Appeal resolution time and moderator feedback."
+      },
+      {
+        "ID": "FR-5",
+        "description": "Audit trail for all moderation actions.",
+        "measurable_target": "100% of moderation actions are logged with timestamps.",
+        "verification_method": "Audit log analysis and system health checks."
+      }
+    ],
+    "Non-Functional Requirements (NFRs)": [
+      {
+        "ID": "NFR-1",
+        "description": "System should support at least 100 concurrent users.",
+        "measurable_target": "95% availability even at full capacity.",
+        "verification_method": "Load testing with 500 users and monitoring key metrics."
+      },
+      {
+        "ID": "NFR-2",
+        "description": "System should have zero data loss.",
+        "measurable_target": "99.99% data durability.",
+        "verification_method": "Regular backup and recovery testing."
+      }
+    ],
+    "Architecture": [
+      {
+        "ID": "COMP-1",
+        "name": "Post Management Service",
+        "components": [
+          "User Authentication",
+          "Post Creation",
+          "Post Validation"
+        ],
+        "links": [
+          "FR-1"
+        ]
+      },
+      {
+        "ID": "COMP-2",
+        "name": "Abuse Reporting Service",
+        "components": [
+          "User Authentication",
+          "Report Submission",
+          "Report Validation"
+        ],
+        "links": [
+          "FR-2"
+        ]
+      },
+      {
+        "ID": "COMP-3",
+        "name": "Moderation Service",
+        "components": [
+          "Role Based Access Control (RBAC)",
+          "Moderator Review",
+          "Audit Trail Logging"
+        ],
+        "links": [
+          "FR-3",
+          "FR-5"
+        ]
+      },
+      {
+        "ID": "COMP-4",
+        "name": "Appeal Management Service",
+        "components": [
+          "User Authentication",
+          "Appeal Submission",
+          "Appeal Processing",
+          "Audit Trail Logging"
+        ],
+        "links": [
+          "FR-4",
+          "FR-5"
+        ]
+      },
+      {
+        "ID": "COMP-5",
+        "name": "API Gateway",
+        "components": [
+          "Rate Limiting",
+          "OAuth2/JWT Authentication"
+        ],
+        "links": [
+          "FR-1",
+          "FR-2",
+          "FR-3",
+          "FR-4"
+        ]
+      }
+    ],
+    "Data Models": [
+      {
+        "ID": "ENT-1",
+        "name": "User",
+        "attributes": [
+          "UserID",
+          "UserName",
+          "Email",
+          "Role"
+        ],
+        "sensitivity": "Public"
+      },
+      {
+        "ID": "ENT-2",
+        "name": "Post",
+        "attributes": [
+          "PostID",
+          "UserID",
+          "Content",
+          "PostTime",
+          "Status"
+        ],
+        "sensitivity": "Public"
+      },
+      {
+        "ID": "ENT-3",
+        "name": "Report",
+        "attributes": [
+          "ReportID",
+          "UserID",
+          "PostID",
+          "Reason",
+          "ReportTime",
+          "Status"
+        ],
+        "sensitivity": "Moderator"
+      },
+      {
+        "ID": "ENT-4",
+        "name": "ModerationDecision",
+        "attributes": [
+          "DecisionID",
+          "ReportID",
+          "ModeratorID",
+          "DecisionTime",
+          "ActionTaken",
+          "Notes"
+        ],
+        "sensitivity": "Audit Trail"
+      },
+      {
+        "ID": "ENT-5",
+        "name": "Appeal",
+        "attributes": [
+          "AppealID",
+          "ReportID",
+          "UserID",
+          "AppealTime",
+          "Status",
+          "Response"
+        ],
+        "sensitivity": "Appealer"
+      }
+    ],
+    "API Contracts": [
+      {
+        "ID": "API-1",
+        "name": "CreatePost",
+        "method": "POST",
+        "path": "/posts",
+        "sensitivity": "Public",
+        "requirement_links": ["FR-1"],
+        "entity_links": ["ENT-1", "ENT-2"],
+        "security": {
+          "type": "OAuth2/JWT",
+          "scope": "user"
+        }
+      },
+      {
+       "ID": "API-2",
+       "name": "ReportAbuse",
+       "method": "POST",
+       "path": "/posts/{post_id}/report",
+       "sensitivity": "Public",
+       "requirement_links": ["FR-2"],
+       "entity_links": ["ENT-1", "ENT-3"],
+       "security": {
+         "type": "OAuth2/JWT",
+         "scope": "user"
+       }
+     },
+     {
+       "ID": "API-3",
+       "name": "ReviewReport",
+       "method": "POST",
+       "path": "/reports/{report_id}/review",
+       "sensitivity": "Moderator",
+       "requirement_links": ["FR-3"],
+       "entity_links": ["ENT-2", "ENT-3", "ENT-4"],
+       "security": {
+         "type": "OAuth2/JWT",
+         "scope": "moderator"
+       }
+     },
+     {
+       "ID": "API-4",
+       "name": "SubmitAppeal",
+       "method": "POST",
+       "path": "/reports/{report_id}/appeal",
+       "sensitivity": "Public",
+       "requirement_links": ["FR-4"],
+       "entity_links": ["ENT-1", "ENT-4", "ENT-5"],
+       "security": {
+         "type": "OAuth2/JWT",
+         "scope": "user"
+       }
+     },
+     {
+       "ID": "API-5",
+       "name": "GetUserPosts",
+       "method": "GET",
+       "path": "/posts/user/{userid}",
+       "sensitivity": "Public",
+       "requirement_links": ["FR-1"],
+       "entity_links": ["ENT-1", "ENT-2"],
+       "security": {
+         "type": "OAuth2/JWT",
+         "scope": "user"
+       }
+     }
+    ],
+    "Test Matrix": [
+      {
+        "ID": "TEST-1",
+        "description": "Unit test for Post Creation",
+        "negative": false,
+        "requirement_links": ["FR-1"],
+        "entity_links": ["ENT-2"]
+      },
+      {
+        "ID": "TEST-2",
+        "description": "User authentication test",
+        "negative": false,
+        "requirement_links": ["FR-1", "FR-2", "FR-3", "FR-4"],
+        "entity_links": ["ENT-1"]
+      },
+      {
+        "ID": "TEST-3",
+        "description": "Rate limit test",
+        "negative": true,
+        "requirement_links": ["NFR-1"],
+        "api_links": ["API-1", "API-2", "API-3", "API-4"]
+      },
+      {
+        "ID": "TEST-4",
+        "description": "Audit trail logging",
+        "negative": false,
+        "requirement_links": ["FR-5"],
+        "entity_links": ["ENT-4"]
+      },
+      {
+        "ID": "TEST-5",
+        "description": "Role Based Access Control (RBAC) test",
+        "negative": false,
+        "requirement_links": ["FR-3", "FR-4"],
+        "entity_links": ["ENT-1", "ENT-4"],
+        "security": {
+          "type": "OAuth2/JWT",
+          "scope": "moderator"
+        }
+      },
+      {
+        "ID": "TEST-6",
+        "description": "Negative authentication test (unauthorized moderator)",
+        "negative": true,
+        "requirement_links": ["unauthorized_moderation_test"],
+        "api_links": ["API-3"]
+      }
+    ],
+    "Obligation Coverage": [
+      {
+        "ID": "OBL-1",
+        "description": "Moderator role authorization.",
+        "requirement_links": ["FR-3"],
+        "component_links": ["COMP-3"],
+        "api_links": ["API-3"],
+        "test_links": ["TEST-5"]
+      },
+      {
+        "ID": "OBL-2",
+        "description": "Reporter privacy.",
+        "requirement_links": ["FR-1", "FR-2"],
+        "component_links": ["COMP-1"],
+        "api_links": ["API-1", "API-2"],
+        "test_links": ["TEST-2"]
+      },
+      {
+        "ID": "OBL-3",
+        "description": "Moderation audit trail.",
+        "requirement_links": ["FR-5"],
+        "component_links": ["COMP-3"],
+        "api_links": ["API-3"],
+        "test_links": ["TEST-4"]
+      },
+      {
+        "ID": "OBL-4",
+        "description": "Appeal state machine.",
+        "requirement_links": ["FR-4"],
+        "component_links": ["COMP-4"],
+        "api_links": ["API-4"],
+        "test_links": ["TEST-6"]
+      },
+      {
+        "ID": "OBL-5",
+        "description": "Unauthorized moderation test.",
+        "requirement_links": ["unauthorized_moderation_test"],
+        "component_links": [],
+        "api_links": ["API-3"],
+        "test_links": ["TEST-6"]
+      }
+    ],
+    "Assumptions": [
+      {
+        "ID": "ASM-1",
+        "description": "The system will primarily be accessed via standard web browsers and mobile apps.",
+        "impact": "Affects the choice of database, caching strategies, and frontend technologies."
+      },
+      {
+        "ID": "ASM-2",
+        "description": "Moderators will have specific roles with well-defined permissions.",
+        "impact": "Affects the RBAC implementation and audit trail design."
+      }
+    ]
+  }
+}

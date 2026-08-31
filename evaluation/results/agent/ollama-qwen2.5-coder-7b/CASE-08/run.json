@@ -1,0 +1,18 @@
+{
+  "evaluation_version": "1.0.0",
+  "prompt_version": "agent-workflow-v1.0.0",
+  "case_id": "CASE-08",
+  "workflow": "multi_agent_verified_orchestrator",
+  "provider": "ollama",
+  "model": "qwen2.5-coder:7b",
+  "started_at": "2026-08-30T03:27:40.383934+00:00",
+  "status": "failed",
+  "runtime_seconds": 35.276,
+  "input_tokens": null,
+  "output_tokens": null,
+  "approximate_cost_usd": null,
+  "request_id": null,
+  "error_type": "ValidationError",
+  "error_message": "13 validation errors for Blueprint\napp_name\n  Extra inputs are not permitted [type=extra_forbidden, input_value='WorkSpaceMng', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden\napp_description\n  Extra inputs are not permitted [type=extra_forbidden, input_value='A subscription SaaS wher...les, and manage billing', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden\nobligations\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'tenant_data_isolation':...idence_ids': ['ASM-1']}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden\nrequirements\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'FR-1': {'description': ...idence_ids': ['Comp-6']}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden\nidea_summary\n  Field required [type=missing, input_value={'app_name': 'WorkSpaceMn...dence_ids': ['Comp-6']}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nfunctional_requirements\n  Field required [type=missing, input_value={'app_name': 'WorkSpaceMn...dence_ids': ['Comp-6']}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nnon_functional_requirements\n  Field required [type=missing, input_value={'app_name': 'WorkSpaceMn...dence_ids': ['Comp-6']}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\narchitecture_components\n  Field required [type=missing, input_value={'app_name': 'WorkSpaceMn...dence_ids': ['Comp-6']}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\ndata_entities\n  Field required [type=missing, input_value={'app_name': 'WorkSpaceMn...dence_ids': ['Comp-6']}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\napi_operations\n  Field required [type=missing, input_value={'app_name': 'WorkSpaceMn...dence_ids': ['Comp-6']}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\ntests\n  Field required [type=missing, input_value={'app_name': 'WorkSpaceMn...dence_ids': ['Comp-6']}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nobligation_coverage\n  Field required [type=missing, input_value={'app_name': 'WorkSpaceMn...dence_ids': ['Comp-6']}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nassumptions\n  Field required [type=missing, input_value={'app_name': 'WorkSpaceMn...dence_ids': ['Comp-6']}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing",
+  "finished_at": "2026-08-30T03:28:15.661937+00:00"
+}

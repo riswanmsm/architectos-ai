@@ -1,0 +1,18 @@
+{
+  "evaluation_version": "1.0.0",
+  "prompt_version": "agent-workflow-v1.0.0",
+  "case_id": "CASE-06",
+  "workflow": "multi_agent_verified_orchestrator",
+  "provider": "ollama",
+  "model": "qwen2.5-coder:7b",
+  "started_at": "2026-08-30T03:25:13.538115+00:00",
+  "status": "failed",
+  "runtime_seconds": 72.78,
+  "input_tokens": null,
+  "output_tokens": null,
+  "approximate_cost_usd": null,
+  "request_id": null,
+  "error_type": "ValidationError",
+  "error_message": "10 validation errors for Blueprint\nblueprint\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'name': 'Expense Submiss...ne}], 'assumptions': []}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden\nidea_summary\n  Field required [type=missing, input_value={'blueprint': {'name': 'E...e}], 'assumptions': []}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nfunctional_requirements\n  Field required [type=missing, input_value={'blueprint': {'name': 'E...e}], 'assumptions': []}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nnon_functional_requirements\n  Field required [type=missing, input_value={'blueprint': {'name': 'E...e}], 'assumptions': []}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\narchitecture_components\n  Field required [type=missing, input_value={'blueprint': {'name': 'E...e}], 'assumptions': []}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\ndata_entities\n  Field required [type=missing, input_value={'blueprint': {'name': 'E...e}], 'assumptions': []}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\napi_operations\n  Field required [type=missing, input_value={'blueprint': {'name': 'E...e}], 'assumptions': []}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\ntests\n  Field required [type=missing, input_value={'blueprint': {'name': 'E...e}], 'assumptions': []}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nobligation_coverage\n  Field required [type=missing, input_value={'blueprint': {'name': 'E...e}], 'assumptions': []}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nassumptions\n  Field required [type=missing, input_value={'blueprint': {'name': 'E...e}], 'assumptions': []}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing",
+  "finished_at": "2026-08-30T03:26:26.319005+00:00"
+}

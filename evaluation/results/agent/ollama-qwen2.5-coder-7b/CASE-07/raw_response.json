@@ -1,0 +1,221 @@
+{
+  "ApplicationName": "FieldSync",
+  "Version": "1.0.0",
+  "Requirements": {
+    "FR-1": {
+      "Description": "Users can create checklists and upload photos.",
+      "Measurement": "Number of checklists and photos successfully created and uploaded.",
+      "VerificationMethod": "Unit tests for checklist and photo creation functions."
+    },
+    "FR-2": {
+      "Description": "Offline access to create and access checklists and photos.",
+      "Measurement": "Percentage of time application accessible offline.",
+      "VerificationMethod": "A/B testing with users offlining the internet for extended periods."
+    },
+    "NFR-1": {
+      "Description": "Application should support up to 1,000 unique users concurrently.",
+      "Measurement": "Number of concurrent users.",
+      "VerificationMethod": "Stress testing with 1,000 unique users."
+    },
+    "NFR-2": {
+      "Description": "Application should have a 99% uptime.",
+      "Measurement": "Uptime percentage for a 30-day period.",
+      "VerificationMethod": "Uptime monitoring tool for 30 days."
+    }
+  },
+  "Architecture": {
+    "COMP-1": {
+      "Component": "Mobile App Client",
+      "Purpose": "Create checklists, capture photos, and sync with server.",
+      "Requirements Linked": ["FR-1", "FR-2"],
+      "Configuration": {
+        "Offline Storage": "SQLite",
+        "Data Synchronization": "WebSocket"
+      }
+    },
+    "COMP-2": {
+      "Component": "API Gateway",
+      "Purpose": "Route requests to appropriate backend services, apply rate-limiting.",
+      "Requirements Linked": ["NFR-1", "NFR-2"],
+      "Configuration": {
+        "Rate-Limiting": "100 requests per minute per user"
+      }
+    },
+    "COMP-3": {
+      "Component": "Backend Server",
+      "Purpose": "Store checklists, photos, and manage user authentication.",
+      "Requirements Linked": ["FR-1"],
+      "Configuration": {
+        "Storage": "Amazon S3 with SSL encryption",
+        "Authentication": "OAuth2 with JWT"
+      }
+    }
+  },
+  "DataModels": {
+    "ENT-1": {
+      "Entity": "User",
+      "Sensitivity": "High",
+      "Attributes": {
+        "UserID": "Unique identifier",
+        "Username": "Display name for user"
+      }
+    },
+    "ENT-2": {
+      "Entity": "Checklist",
+      "Sensitivity": "Medium",
+      "Attributes": {
+        "ChecklistID": "Unique identifier",
+        "UserID": "User who created the checklist",
+        "Items": "List of checklist items",
+        "IsOffline": "Boolean indicating if the checklist was created offline"
+      }
+    },
+    "ENT-3": {
+      "Entity": "Photo",
+      "Sensitivity": "Low",
+      "Attributes": {
+        "PhotoID": "Unique identifier",
+        "ChecklistID": "Checklist it belongs to",
+        "ImageBytes": "Binary data of the photo",
+        "Thumbnail": "Binary data of the photo thumbnail"
+      }
+    }
+  },
+  "APIContracts": {
+    "API-1": {
+      "Method": "POST",
+      "Path": "/checklists",
+      "Purpose": "Create a new checklist.",
+      "Requirements Linked": ["FR-1"],
+      "Entity Linked": "ENT-2",
+      "Security": "OAuth2 with JWT"
+    },
+    "API-2": {
+      "Method": "POST",
+      "Path": "/photos",
+      "Purpose": "Upload a new photo.",
+      "Requirements Linked": ["FR-1"],
+      "Entity Linked": "ENT-3",
+      "Security": "OAuth2 with JWT"
+    },
+    "API-3": {
+      "Method": "GET",
+      "Path": "/checklists/{checklistID}",
+      "Purpose": "Retrieve a checklist.",
+      "Requirements Linked": ["FR-1"],
+      "Entity Linked": "ENT-2",
+      "Security": "OAuth2 with JWT"
+    },
+    "API-4": {
+      "Method": "GET",
+      "Path": "/photos/{photoID}",
+      "Purpose": "Retrieve a photo.",
+      "Requirements Linked": ["FR-1"],
+      "Entity Linked": "ENT-3",
+      "Security": "OAuth2 with JWT"
+    },
+    "API-5": {
+      "Method": "GET",
+      "Path": "/sync/{userID}",
+      "Purpose": "Synchronize offline drafts with server.",
+      "Requirements Linked": ["FR-2", "sync_conflict_strategy", "duplicate_upload_handling"],
+      "Entity Linked": "ENT-2, ENT-3",
+      "Security": "OAuth2 with JWT"
+    }
+  },
+  "TestMatrix": [
+    {
+      "TestID": "TEST-1",
+      "Type": "Unit",
+      "Description": "Test checklist creation.",
+      "Function": "checklist_create",
+      "Parameters": {
+        "userID": "testUserID",
+        "items": ["Item1", "Item2"]
+      },
+      "Expected": "Checklist created with items."
+    },
+    {
+      "TestID": "TEST-2",
+      "Type": "Integration",
+      "Description": "Test photo upload.",
+      "Function": "photo_upload",
+      "Parameters": {
+        "userID": "testUserID",
+        "checklistID": "testChecklistID",
+        "photoBytes": "testPhotoBytes"
+      },
+      "Expected": "Photo uploaded successfully."
+    },
+    {
+      "TestID": "TEST-3",
+      "Type": "Performance",
+      "Description": "Test synchronization of offline drafts with server.",
+      "Function": "sync_drafts",
+      "Parameters": {
+        "userID": "testUserID",
+        "offlineDrafts": [{"checklistID": "draftChecklistID", "items": ["Item3", "Item4"]}]
+      },
+      "Expected": "Offline drafts synchronized successfully."
+    },
+    {
+      "TestID": "TEST-4",
+      "Type": "Negative",
+      "Description": "Test rejected access to API due to insufficient rate-limit.",
+      "Function": "rate_limit_auth_rejection",
+      "Parameters": {
+        "userWithRateLimit": "userWithRateLimit"
+      },
+      "Expected": "Request rejected with rate-limit error",
+      "Negative": true
+    },
+    {
+      "TestID": "TEST-5",
+      "Type": "Negative",
+      "Description": "Test rejected access to API due to missing authorization.",
+      "Function": "no_auth_rejection",
+      "Parameters": {
+        "unauthorizedUser": "unauthorizedUser"
+      },
+      "Expected": "Request rejected with authorization error",
+      "Negative": true
+    }
+  ],
+  "ObligationCoverage": {
+    "offline_draft_persistence": {
+      "DesignResponse": "COMP-1 uses SQLite for offline storage.",
+      "ComponentLink": "COMP-1",
+      "TestLink": "TEST-2"
+    },
+    "sync_conflict_strategy": {
+      "DesignResponse": "API-5 includes conflict resolution logic.",
+      "ComponentLink": "COMP-3",
+      "APILink": "API-5",
+      "TestLink": "TEST-3"
+    },
+    "duplicate_upload_handling": {
+      "DesignResponse": "API-3 and API-4 include logic to handle duplicates.",
+      "ComponentLink": "COMP-3",
+      "APILink": "API-3, API-4",
+      "TestLink": "TEST-2"
+    },
+    "photo_access_control": {
+      "DesignResponse": "API Contract includes OAuth2/JWT security definitions.",
+      "ComponentLink": "COMP-3",
+      "APILink": "API-3, API-4, API-5",
+      "TestLink": "TEST-4, TEST-5"
+    },
+    "interrupted_sync_test": {
+      "DesignResponse": "Will be implemented in a future release.",
+      "ComponentLink": "COMP-3",
+      "TestLink": "N/A"
+    }
+  },
+  "Assumptions": {
+    "ASM-1": {
+      "Issue": "Offline photo storage limitations",
+      "Mitigation": "Use of efficient photo compression and storage.",
+      "ReviewRequired": true
+    }
+  }
+}

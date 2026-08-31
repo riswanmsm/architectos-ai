@@ -1,0 +1,25 @@
+{
+  "evaluation_version": "1.0.0",
+  "prompt_version": "agent-workflow-v1.0.0",
+  "system": "multi_agent_architectos",
+  "provider": "ollama",
+  "model": "qwen2.5-coder:7b",
+  "total_cases": 1,
+  "completed_cases": 1,
+  "failed_cases": 0,
+  "structured_output_validity_rate": 100.0,
+  "macro_average_vbc": 89.47,
+  "total_critical_findings": 1,
+  "total_runtime_seconds": 83.398,
+  "total_approximate_cost_usd": 0.0,
+  "cases": [
+    {
+      "case_id": "CASE-02",
+      "status": "completed",
+      "vbc": 89.47,
+      "critical_findings": 1,
+      "runtime_seconds": 83.398,
+      "approximate_cost_usd": 0.0
+    }
+  ]
+}

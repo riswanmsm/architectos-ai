@@ -69,8 +69,9 @@ Strict Engineering Contract:
 6. Obligation Coverage: Provide explicit design responses and evidence IDs linking requirements, components, APIs, and tests for every declared obligation.
 7. Assumptions: Record any trade-offs needing human review (ASM-1, ...).
 
-Return the verified envelope matching the required Blueprint JSON schema.
+Return an actual JSON object instance with the generated blueprint data containing all required fields: idea_summary, functional_requirements, non_functional_requirements, architecture_components, data_entities, api_operations, tests, obligation_coverage, assumptions. Do NOT return a JSON schema meta-definition.
 """
+
 
 
 def calculate_cost(
@@ -123,7 +124,22 @@ def run_agent_case(
         result = provider_client.generate_structured(prompt, Blueprint)
         runtime = round(time.perf_counter() - start, 3)
         (case_dir / "raw_response.json").write_text(result.raw_text, encoding="utf-8")
-        blueprint = Blueprint.model_validate_json(result.raw_text)
+        
+        try:
+            blueprint = Blueprint.model_validate_json(result.raw_text)
+        except ValidationError as val_err:
+            # Attempt 1 automated self-repair retry with explicit validation feedback
+            first_err = str(val_err).splitlines()[0]
+            repair_prompt = (
+                f"{prompt}\n\n[VALIDATION FEEDBACK]: Your previous response failed schema validation:\n"
+                f"{str(val_err)[:400]}\n\n"
+                f"Fix the error (ensure exact ID formats like FR-1, ENT-1, API-1 without leading zeros) and return valid JSON."
+            )
+            repair_result = provider_client.generate_structured(repair_prompt, Blueprint)
+            (case_dir / "raw_response_repaired.json").write_text(repair_result.raw_text, encoding="utf-8")
+            blueprint = Blueprint.model_validate_json(repair_result.raw_text)
+            result = repair_result
+
         (case_dir / "blueprint.json").write_text(
             blueprint.model_dump_json(indent=2) + "\n",
             encoding="utf-8",
@@ -267,11 +283,17 @@ def main() -> int:
         records.append(rec)
         status = rec["status"]
         vbc = rec.get("score", {}).get("verified_blueprint_coverage", "N/A")
-        print(f"  Result: {status.upper()} | VBC: {vbc}%")
+        if status == "failed":
+            err_type = rec.get("error_type", "UnknownError")
+            first_err = (rec.get("error_message") or "").splitlines()[0]
+            print(f"  Result: FAILED | Reason: {err_type} - {first_err[:120]}")
+        else:
+            print(f"  Result: COMPLETED | VBC: {vbc}% | Latency: {rec.get('runtime_seconds')}s")
 
     write_summary(records, output_dir)
     print(f"\nCompleted {len(records)} cases. Summary saved to {output_dir}/summary.json")
     return 0
+
 
 
 if __name__ == "__main__":

@@ -1,0 +1,146 @@
+{
+  "requirements": {
+    "FR-1": {
+      "description": "Organization-scoped documents with permissions management.",
+      "measurement": "Number of documents per organization, user permissions per document.",
+      "verification_method": "Manual testing with specific permissions assigned to different users and organizations."
+    },
+    "FR-2": {
+      "description": "Real-time co-editing.",
+      "measurement": "Latency in real-time co-edit updates.",
+      "verification_method": "Performance testing with multiple users simultaneously editing a single document."
+    },
+    "FR-3": {
+      "description": "Offline edits with synchronization on connection.",
+      "measurement": "Number of successful reconversions of offline edits upon reconnection.",
+      "verification_method": "Automated user testing with simulated loss of connectivity and recovery."
+    },
+    "FR-4": {
+      "description": "Regional data residency.",
+      "measurement": "Data distribution across regions.",
+      "verification_method": "Data validation checks to ensure data is stored in the correct region."
+    },
+    "FR-5": {
+      "description": "External guest access with limited permissions.",
+      "measurement": "Number of guests with active access and their respective permissions.",
+      "verification_method": "Manual review and testing with guest accounts."
+    },
+    "FR-6": {
+      "description": "Immutable audit history with timestamp and actor.",
+      "measurement": "Length and completeness of audit logs.",
+      "verification_method": "Audit log analysis to ensure immutability and correctness."
+    }
+  },
+  "architecture": {
+    "components": {
+      "COMP-1": {
+        "description": "API Gateway",
+        "dependencies": ["API-1", "API-2"],
+        "security": ["rate-limiting"]
+      },
+      "COMP-2": {
+        "description": "Authentication Service",
+        "dependencies": ["API-1", "API-2"],
+        "security": ["OAuth2"]
+      },
+      "COMP-3": {
+        "description": "Database Management Service",
+        "dependencies": ["ENT-1"],
+        "security": ["data_sensitivity"]
+      },
+      "COMP-4": {
+        "description": "Synchronization Service",
+        "dependencies": ["API-3"],
+        "security": ["encryption"]
+      }
+    }
+  },
+  "data_models": {
+    "ENT-1": {
+      "description": "Document",
+      "sensitivity": "medium",
+      "attributes": ["title", "content", "version", "created_at", "updated_at"]
+    }
+  },
+  "api_contracts": {
+    "API-1": {
+      "method": "GET",
+      "path": "/doc/{doc_id}",
+      "requirement_links": ["FR-1", "FR-2", "FR-3", "FR-4", "FR-5", "FR-6"],
+      "entity_links": ["ENT-1"],
+      "security": ["JWT"]
+    },
+    "API-2": {
+      "method": "UPDATE",
+      "path": "/doc/{doc_id}",
+      "requirement_links": ["FR-1", "FR-2", "FR-3", "FR-4", "FR-5", "FR-6"],
+      "entity_links": ["ENT-1"],
+      "security": ["JWT"]
+    },
+    "API-3": {
+      "method": "POST",
+      "path": "/sync",
+      "requirement_links": ["FR-1", "FR-3", "FR-4", "FR-5"],
+      "entity_links": [],
+      "security": ["JWT"]
+    }
+  },
+  "test_matrix": {
+    "TEST-1": {
+      "description": "Concurrency tests with multiple users editing the same document.",
+      "negative": false
+    },
+    "TEST-2": {
+      "description": "Offline edit synchronization test.",
+      "negative": false
+    },
+    "TEST-3": {
+      "description": "Authentication failure test using incorrect credentials.",
+      "negative": true
+    },
+    "TEST-4": {
+      "description": "Rate-limiting check during high load.",
+      "negative": true
+    }
+  },
+  "obligation_coverage": {
+    "tenant_and_guest_authorization": {
+      "COMP-1": ["API-1", "API-2"],
+      "COMP-2": ["API-1", "API-2"],
+      "TEST-3": ["Authentication failure test"]
+    },
+    "concurrent_edit_strategy": {
+      "COMP-1": ["API-1"],
+      "COMP-2": ["API-1"],
+      "TEST-1": ["Concurrency tests"]
+    },
+    "offline_conflict_resolution": {
+      "COMP-1": ["API-2"],
+      "COMP-4": ["API-3"],
+      "TEST-2": ["Offline edit synchronization test"]
+    },
+    "regional_data_residency": {
+      "COMP-3": ["ENT-1"],
+      "TEST-4": []  }
+    },
+    "immutable_audit_history": {
+      "COMP-1": ["API-1", "API-2"],
+      "COMP-3": ["ENT-1"],
+      "TEST-4": [
+        "Review audit logs for compliance with the requirement to make them immutable."
+      ]
+    },
+    "revoked_guest_offline_write_test": {
+      "COMP-1": ["API-2"],
+      "COMP-4": ["API-3"],
+      "TEST-4": [
+        "Simulate revocation and attempt to save offline changes."
+      ]
+    },
+    "cross_region_failure_test": {
+      "COMP-3": ["ENT-1"],
+      "TEST-4": [
+        "Simulate network outage across regions and recoverability."
+      ]
+    }
+  }

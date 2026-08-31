@@ -1,0 +1,253 @@
+{
+  "application_idea": "A collaborative whiteboard with private rooms, live drawing, reconnect support, history, and export",
+  "case_obligations": ["room_membership_authorization", "concurrent_edit_strategy", "reconnect_recovery", "history_retention", "unauthorized_room_access_test"],
+  "strict_engineering_contract": {
+    "requirements": {
+      "FR-1": {
+        "description": "Room Creation",
+        "numeric_target": "100%",
+        "verification_method": "Manual testing and automated user flow testing"
+      },
+      "FR-2": {
+        "description": "Live Drawing",
+        "numeric_target": "100%",
+        "verification_method": "Manual testing and automated functional testing"
+      },
+      "FR-3": {
+        "description": "Reconnect Support",
+        "numeric_target": "95%",
+        "verification_method": "Automated integration and performance testing"
+      },
+      "FR-4": {
+        "description": "History Retention",
+        "numeric_target": "100%",
+        "verification_method": "Manual testing and automated data integrity testing"
+      },
+      "FR-5": {
+        "description": "Export Feature",
+        "numeric_target": "100%",
+        "verification_method": "Manual testing and automated user flow testing"
+      },
+      "NFR-1": {
+        "description": "Security",
+        "numeric_target": "99%",
+        "verification_method": "Automated security testing"
+      },
+      "NFR-2": {
+        "description": "Performance",
+        "numeric_target": "95%",
+        "verification_method": "Automated performance testing"
+      }
+    },
+    "architecture": {
+      "COMP-1": {
+        "name": "Frontend Service",
+        "components": [],
+        "requirements": ["FR-1", "FR-2", "FR-3", "FR-4", "FR-5"],
+        "entity_ids": ["ENT-1", "ENT-2", "ENT-3"],
+        "api_gateway": true
+      },
+      "COMP-2": {
+        "name": "Backend Service",
+        "components": [],
+        "requirements": ["FR-1", "FR-2", "FR-3", "FR-4", "FR-5"],
+        "entity_ids": ["ENT-1", "ENT-2", "ENT-3"],
+        "api_gateway": true,
+        "rate_limiting": true
+      },
+      "COMP-3": {
+        "name": "Authentication Service",
+        "components": [],
+        "requirements": ["room_membership_authorization", "unauthorized_room_access_test"],
+        "entity_ids": ["ENT-1"],
+        "api_gateway": true
+      },
+      "COMP-4": {
+        "name": "Data Model Service",
+        "components": [],
+        "requirements": ["NFR-1"],
+        "entity_ids": ["ENT-2"]
+      },
+      "COMP-5": {
+        "name": "Room Service",
+        "components": [],
+        "requirements": ["FR-1", "FR-4"],
+        "entity_ids": ["ENT-1", "ENT-2"]
+      },
+      "COMP-6": {
+        "name": "Editor Service",
+        "components": [],
+        "requirements": ["FR-2"],
+        "entity_ids": ["ENT-1"]
+      },
+      "COMP-7": {
+        "name": "History Service",
+        "components": [],
+        "requirements": ["FR-4"],
+        "entity_ids": ["ENT-1", "ENT-3"]
+      },
+      "COMP-8": {
+        "name": "Export Service",
+        "components": [],
+        "requirements": ["FR-5"],
+        "entity_ids": ["ENT-1", "ENT-3"]
+      }
+    },
+    "data_models": {
+      "ENT-1": {
+        "name": "Room",
+        "data_sensitivity_flags": ["public", "private"],
+        "requirements": ["FR-1", "room_membership_authorization"]
+      },
+      "ENT-2": {
+        "name": "Drawing",
+        "data_sensitivity_flags": ["private"],
+        "requirements": ["FR-2"]
+      },
+      "ENT-3": {
+        "name": "History",
+        "data_sensitivity_flags": ["public", "private"],
+        "requirements": ["FR-4"]
+      }
+    },
+    "api_contracts": {
+      "API-1": {
+        "method": "POST",
+        "path": "/room",
+        "requirements": ["FR-1"],
+        "entity_links": ["ENT-1"],
+        "security_definition": "OAuth2/JWT"
+      },
+      "API-2": {
+        "method": "POST",
+        "path": "/room/{roomId}/drawing",
+        "requirements": ["FR-2"],
+        "entity_links": ["ENT-1", "ENT-2"],
+        "security_definition": "OAuth2/JWT"
+      },
+      "API-3": {
+        "method": "GET",
+        "path": "/room/{roomId}/drawing",
+        "requirements": ["FR-2"],
+        "entity_links": ["ENT-1", "ENT-2"],
+        "security_definition": "OAuth2/JWT"
+      },
+      "API-4": {
+        "method": "GET",
+        "path": "/room/{roomId}/history",
+        "requirements": ["FR-4"],
+        "entity_links": ["ENT-1", "ENT-3"],
+        "security_definition": "OAuth2/JWT"
+      },
+      "API-5": {
+        "method": "GET",
+        "path": "/export/{entityId}",
+        "requirements": ["FR-5"],
+        "entity_links": ["ENT-1", "ENT-3"],
+        "security_definition": "OAuth2/JWT"
+      }
+    },
+    "test_matrix": {
+      "TEST-1": {
+        "Description": "Room Creation",
+        "Category": "Functionality",
+        "method": "POST",
+        "path": "/room",
+        "requirements": ["FR-1"],
+        "oauth2": true,
+        "negative": false
+      },
+      "TEST-2": {
+        "Description": "Unauthenticated Room Access Test",
+        "Category": "Security",
+        "method": "GET",
+        "path": "/room/{roomId}/drawing",
+        "requirements": ["unauthorized_room_access_test"],
+        "oauth2": false,
+        "negative": true
+      },
+      "TEST-3": {
+        "Description": "Authorization with Invalid Token",
+        "Category": "Security",
+        "method": "POST",
+        "path": "/room",
+        "requirements": ["room_membership_authorization"],
+        "oauth2": true,
+        "negative": true
+      },
+      "TEST-4": {
+        "Description": "Room Members Authorization",
+        "Category": "Security",
+        "method": "POST",
+        "path": "/room/{roomId}/invite",
+        "requirements": ["room_membership_authorization"],
+        "oauth2": true,
+        "negative": false
+      },
+      "TEST-5": {
+        "Description": "Rate limiting for non-authenticated access",
+        "Category": "Performance",
+        "method": "GET",
+        "path": "/room/{roomId}/drawing",
+        "requirements": ["NFR-2"],
+        "oauth2": false,
+        "negative": true,
+        "rateLimit": true
+      },
+      "TEST-6": {
+        "Description": "API Gateway Authentication",
+        "Category": "Security",
+        "method": "GET",
+        "path": "/room/{roomId}/drawing",
+        "requirements": ["NFR-1"],
+        "oauth2": true,
+        "negative": false
+      },
+      "TEST-7": {
+        "Description": "Reconnect Recovery",
+        "Category": "Functionality",
+        "method": "GET",
+        "path": "/room/{roomId}/drawing",
+        "requirements": ["FR-3"],
+        "oauth2": true,
+        "negative": false
+      },
+      "TEST-8": {
+        "Description": "Export Feature",
+        "Category": "Functionality",
+        "method": "GET",
+        "path": "/export/{entityId}",
+        "requirements": ["FR-5"],
+        "oauth2": true,
+        "negative": false
+      }
+    },
+    "obligation_coverage": {
+      "room_membership_authorization": {
+        "design_response": "Access to rooms is restricted to authenticated users. All room creation and invitations require valid usernames and tokens.",
+        "evidence_ids": ["COMP-3", "API-1", "API-2"]
+      },
+      "concurrent_edit_strategy": {
+        "design_response": "Co-edited drawing features handle concurrent edits through optimistic concurrency token (OCET) strategy.",
+        "evidence_ids": ["COMP-6", "API-2", "API-4"]
+      },
+      "reconnect_recovery": {
+        "design_response": "Reconnect recovery is supported by maintaining a long-polling socket connection which is re-established in case of disconnection.",
+        "evidence_ids": ["COMP-1", "API-3", "API-5"]
+      },
+      "history_retention": {
+        "design_response": "History is retained indefinitely and is available to all authorized users. Retention is verified upon user request for the history feature.",
+        "evidence_ids": ["COMP-4", "COMP-7", "API-4"]
+      },
+      "unauthorized_room_access_test": {
+        "design_response": "Rejection of unauthenticated API requests to room-based API endpoints is verified via unauthorized_room_access_test requirement.",
+        "evidence_ids": ["COMP-3", "API-2"]
+      }
+    },
+    "assumptions": {
+      "ASM-1": {
+        "description": "User authentication is handled through OAuth2/JWT for better security and stateless nature which simplifies the system architecture and makes it scalable, stateless, and easier to manage session and authorization data."
+      }
+    }
+  }
+}

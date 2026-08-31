@@ -56,7 +56,10 @@ The blueprint must explicitly consider these case obligations:
 {obligations}
 
 Use stable IDs with these prefixes: FR-, NFR-, COMP-, ENT-, API-, TEST-, and ASM-. Link artifacts using those IDs. Public operations may use null authentication and authorization. Non-public operations must describe both. For every obligation, provide a design response and evidence IDs that point to artifacts in the blueprint. Record uncertain product decisions as assumptions needing human review.
+
+Return an actual JSON object instance with the generated blueprint data containing all required fields. Do NOT return a JSON schema meta-definition.
 """
+
 
 
 def calculate_cost(

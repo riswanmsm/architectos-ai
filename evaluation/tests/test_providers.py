@@ -27,9 +27,10 @@ class ProviderTests(unittest.TestCase):
 
     def test_registry_contains_supported_providers(self) -> None:
         self.assertEqual(
-            {"gemini", "openai", "deepseek", "anthropic"},
+            {"gemini", "openai", "deepseek", "anthropic", "ollama"},
             set(self.registry),
         )
+
 
     def test_environment_selects_provider_and_model(self) -> None:
         with patch.dict(

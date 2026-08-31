@@ -1,0 +1,72 @@
+{
+  "app_name": "WorkSpaceMng",
+  "app_description": "A subscription SaaS where organizations create workspaces, invite members, assign roles, and manage billing",
+  "obligations": {
+    "tenant_data_isolation": {
+      "description": "Data from different users or organizations on the platform must be isolated in a way that they cannot access each other's data, both at rest and in transit. This is a must-have feature for any platform that allows multi-tenancy to avoid any data leakage.",
+      "evidence_ids": ["Comp-1", "API-1", "API-4"]
+    },
+    "workspace_role_authorization": {
+      "description": "Control what actions a workspace member can and cannot perform within their assigned role. For example, in a project management workspace, a user might have the roles of 'Admin', 'User', or 'Viewer', with each role赋予 different permissions.",
+      "evidence_ids": ["Comp-1", "API-7"]
+    },
+    "invitation_expiration": {
+      "description": "Organizations should have the ability to specify the time during which an invitation is valid. If the invitation is not accepted within the validity period, it should expire.",
+      "evidence_ids": ["API-2"]
+    },
+    "billing_webhook_idempotency": {
+      "description": "The billing system should be designed in a way that prevents duplicate charges when a webhook notification is transmitted more than once.",
+      "evidence_ids": ["API-5", "Test-4"]
+    },
+    "cross_tenant_access_test": {
+      "description": "Verification that organizations cannot access data in other organizations' workspaces, as outlined in requirement 10.",
+      "evidence_ids": ["ASM-1"]
+    }
+  },
+  "requirements": {
+    "FR-1": {
+      "description": "Organizations should be able to create, update, and delete workspaces.",
+      "evidence_ids": ["Comp-1", "API-1", "API-2", "API-3"]
+    },
+    "FR-2": {
+      "description": "Users within a workspace should be able to manage their roles and permissions within the workspace.",
+      "evidence_ids": ["Comp-1", "API-7"]
+    },
+    "FR-3": {
+      "description": "Organizations should be able to invite users to their workspaces with specific roles.",
+      "evidence_ids": ["Comp-1", "API-2"]
+    },
+    "FR-4": {
+      "description": "Users should receive notifications when they have been invited to a workspace.",
+      "evidence_ids": ["API-4"]
+    },
+    "FR-5": {
+      "description": "Users should be able to accept or reject an invitation to a workspace.",
+      "evidence_ids": ["API-2"]
+    },
+    "FR-6": {
+      "description": "Organizations should be able to manage their billing information.",
+      "evidence_ids": ["API-2", "API-5"]
+    },
+    "NFR-1": {
+      "description": "The platform must be secure and have robust access controls.",
+      "evidence_ids": ["Comp-2"]
+    },
+    "NFR-2": {
+      "description": "The platform must be able to handle peak usage without degradation.",
+      "evidence_ids": ["Comp-3", "Test-2"]
+    },
+    "NFR-3": {
+      "description": "The platform must be able to scale up as demand increases.",
+      "evidence_ids": ["Comp-4"]
+    },
+    "NFR-4": {
+      "description": "The platform must be available 99.99% of the time.",
+      "evidence_ids": ["Comp-5"]
+    },
+    "NFR-5": {
+      "description": "The platform must have high吞吐量."
+      },
+      "evidence_ids": ["Comp-6"]
+    }
+  }

@@ -1,0 +1,18 @@
+{
+  "evaluation_version": "1.0.0",
+  "prompt_version": "agent-workflow-v1.0.0",
+  "case_id": "CASE-03",
+  "workflow": "multi_agent_verified_orchestrator",
+  "provider": "ollama",
+  "model": "qwen2.5-coder:7b",
+  "started_at": "2026-08-30T03:22:35.311417+00:00",
+  "status": "failed",
+  "runtime_seconds": 87.794,
+  "input_tokens": null,
+  "output_tokens": null,
+  "approximate_cost_usd": null,
+  "request_id": null,
+  "error_type": "ValidationError",
+  "error_message": "12 validation errors for Blueprint\napplication_idea\n  Extra inputs are not permitted [type=extra_forbidden, input_value='A collaborative whiteboa...rt, history, and export', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden\ncase_obligations\n  Extra inputs are not permitted [type=extra_forbidden, input_value=['room_membership_authori...rized_room_access_test'], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden\nstrict_engineering_contract\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'requirements': {'FR-1':... authorization data.'}}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden\nidea_summary\n  Field required [type=missing, input_value={'application_idea': 'A c...authorization data.'}}}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nfunctional_requirements\n  Field required [type=missing, input_value={'application_idea': 'A c...authorization data.'}}}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nnon_functional_requirements\n  Field required [type=missing, input_value={'application_idea': 'A c...authorization data.'}}}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\narchitecture_components\n  Field required [type=missing, input_value={'application_idea': 'A c...authorization data.'}}}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\ndata_entities\n  Field required [type=missing, input_value={'application_idea': 'A c...authorization data.'}}}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\napi_operations\n  Field required [type=missing, input_value={'application_idea': 'A c...authorization data.'}}}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\ntests\n  Field required [type=missing, input_value={'application_idea': 'A c...authorization data.'}}}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nobligation_coverage\n  Field required [type=missing, input_value={'application_idea': 'A c...authorization data.'}}}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nassumptions\n  Field required [type=missing, input_value={'application_idea': 'A c...authorization data.'}}}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing",
+  "finished_at": "2026-08-30T03:24:03.106470+00:00"
+}

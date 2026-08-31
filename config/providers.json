@@ -63,5 +63,34 @@
         "output_price_per_million": 5.0
       }
     }
+  },
+  "ollama": {
+    "adapter": "openai_compatible",
+    "key_env": "OLLAMA_API_KEY",
+    "base_url": "http://localhost:11434/v1",
+    "default_model": "qwen2.5-coder:7b",
+    "response_mode": "json_schema",
+    "timeout_seconds": 600,
+    "max_tokens_field": "max_tokens",
+
+    "models": {
+      "qwen2.5-coder:7b": {
+        "input_price_per_million": 0.0,
+        "output_price_per_million": 0.0
+      },
+      "qwen3.6:latest": {
+        "input_price_per_million": 0.0,
+        "output_price_per_million": 0.0
+      },
+      "qwen2.5:latest": {
+        "input_price_per_million": 0.0,
+        "output_price_per_million": 0.0
+      },
+      "llama3.2": {
+        "input_price_per_million": 0.0,
+        "output_price_per_million": 0.0
+      }
+    }
   }
 }
+

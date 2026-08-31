@@ -12,7 +12,27 @@ LLM_MODEL=gemini-3.7-flash
 GEMINI_API_KEY=replace_with_your_key
 ```
 
-Configured alternatives are `openai`, `deepseek`, and `anthropic`. Set the matching key variable shown in `.env.example`.
+Configured alternatives are `ollama` (Local models), `openai`, `deepseek`, and `anthropic`. Set the matching key variable shown in `.env.example`.
+
+## Use local models with Ollama (100% Free & Offline)
+
+ArchitectOS supports local models (like `qwen2.5-coder:7b`, `qwen3.6`, `llama3.2`) via Ollama's OpenAI-compatible endpoint.
+
+1. Ensure Ollama is running:
+   ```bash
+   ollama serve
+   ```
+2. Pull your desired model (e.g. Qwen):
+   ```bash
+   ollama pull qwen2.5-coder:7b
+   ```
+3. Set your `.env`:
+   ```env
+   LLM_PROVIDER=ollama
+   LLM_MODEL=qwen2.5-coder:7b
+   ```
+*(No API key or external network required. All token costs are recorded as $0.00).*
+
 
 ## Add a model from an existing provider
 
