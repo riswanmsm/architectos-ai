@@ -62,6 +62,65 @@ export default function Home() {
   const [readinessScore, setReadinessScore] = useState<number | null>(null);
   const [riskDetails, setRiskDetails] = useState<string>('');
   const [reopeningLoop, setReopeningLoop] = useState(false);
+  const [humanApproved, setHumanApproved] = useState<boolean | null>(null);
+
+  const handleApprove = async (approved: boolean) => {
+    if (!sessionId) return;
+    try {
+      await fetch(`${BACKEND_URL}/api/session/approval`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          session_id: sessionId,
+          approved,
+          notes: approved ? 'Certified by Lead Systems Architect.' : 'Changes requested by Reviewer.'
+        })
+      });
+      setHumanApproved(approved);
+      if (approved) {
+        setChatMessages(prev => [
+          ...prev,
+          {
+            author: 'Lead Human Architect',
+            message: '✓ Engineering Blueprint approved and certified for production handoff.'
+          }
+        ]);
+      }
+    } catch (e) {
+      console.error('Failed to submit human approval:', e);
+      setHumanApproved(approved);
+    }
+  };
+
+  const handleDownloadKiroZip = () => {
+    if (!sessionId) return;
+    const downloadUrl = `${BACKEND_URL}/api/session/${sessionId}/export/kiro/zip`;
+    const a = document.createElement('a');
+    a.href = downloadUrl;
+    a.download = `architectos-kiro-specs-${sessionId.slice(0, 8)}.zip`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
+  const handleDownloadJson = async () => {
+    if (!sessionId) return;
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/session/${sessionId}/export/kiro`);
+      const data = await res.json();
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `architectos-blueprint-${sessionId.slice(0, 8)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error('Failed to export JSON blueprint:', e);
+    }
+  };
 
   const startSession = async () => {
     if (!idea.trim()) return;
@@ -70,6 +129,7 @@ export default function Home() {
     setRiskDetails('');
     setChatMessages([]);
     setReopeningLoop(false);
+    setHumanApproved(null);
     setBlueprints({
       summary: '',
       requirements: '',
@@ -79,6 +139,7 @@ export default function Home() {
       testing: '',
       risks: ''
     });
+
     
     // Reset status
     setDisciplines(prev => prev.map(d => ({ ...d, status: 'idle', statusText: 'Idle', confidence: undefined })));
@@ -435,7 +496,55 @@ export default function Home() {
                   <span className="alert-text">Engineering Review Throttled. Reopening Architecture module for revision...</span>
                 </div>
               )}
+
+              {/* Human Architectural Review & Certification Checkpoint */}
+              {!isGenerating && readinessScore !== null && readinessScore >= 85 && (
+                <div className="human-approval-card animate-pop">
+                  <div className="approval-header">
+                    <span className="approval-title">
+                      🛡️ Lead Architectural Checkpoint (Ground Rules 04 & 05)
+                    </span>
+                    {humanApproved === true && (
+                      <span className="approval-badge-approved">
+                        ✓ Blueprint Certified
+                      </span>
+                    )}
+                  </div>
+                  
+                  {humanApproved === null ? (
+                    <div className="approval-actions">
+                      <button className="btn-approve" onClick={() => handleApprove(true)}>
+                        ✓ Approve Architecture & Sign Off
+                      </button>
+                      <button className="btn-reject" onClick={() => handleApprove(false)}>
+                        ✕ Request Changes
+                      </button>
+                    </div>
+                  ) : humanApproved === true ? (
+                    <p style={{ fontSize: '13px', color: '#6ee7b7' }}>
+                      Architecture certified with <strong>{readinessScore}% Verified Blueprint Coverage</strong>. Ready for developer handoff.
+                    </p>
+                  ) : (
+                    <p style={{ fontSize: '13px', color: '#fca5a5' }}>
+                      Changes requested. Additional review cycle required.
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* Export Spec Bundle Controls */}
+              {!isGenerating && sessionId && readinessScore !== null && (
+                <div className="export-actions-bar animate-pop">
+                  <button className="btn-export-kiro" onClick={handleDownloadKiroZip}>
+                    📦 Export Spec Bundle (.kiro/specs ZIP)
+                  </button>
+                  <button className="btn-export-secondary" onClick={handleDownloadJson}>
+                    📄 Export JSON Blueprint
+                  </button>
+                </div>
+              )}
             </div>
+
           ) : (
             <div className="output-placeholder">
               <div className="placeholder-icon">🗂️</div>

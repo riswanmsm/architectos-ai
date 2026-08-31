@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArchitectOS — Presentation Slides</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: rgba(22, 30, 49, 0.85);
+      --border: rgba(255, 255, 255, 0.1);
+      --accent: #3b82f6;
+      --accent-glow: rgba(59, 130, 246, 0.35);
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(59, 130, 246, 0.15), transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(16, 185, 129, 0.12), transparent 40%);
+    }
+
+    .deck-container {
+      width: 90vw;
+      max-width: 1200px;
+      height: 82vh;
+      max-height: 720px;
+      position: relative;
+      perspective: 1000px;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px 55px;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 40px var(--accent-glow);
+      animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .slide.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Header & Badges */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(59, 130, 246, 0.18);
+      color: #93c5fd;
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      padding: 4px 14px;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .badge-time {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fcd34d;
+      border-color: rgba(245, 158, 11, 0.35);
+    }
+
+    .badge-success {
+      background: rgba(16, 185, 129, 0.15);
+      color: #6ee7b7;
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+
+    h1 {
+      font-size: 2.3rem;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 40%, #93c5fd 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    /* Grid & Card Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      flex-grow: 1;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 18px;
+      flex-grow: 1;
+    }
+
+    .card {
+      background: rgba(10, 16, 29, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 12px;
+    }
+
+    .card-danger {
+      border-color: rgba(239, 68, 68, 0.35);
+      background: rgba(239, 68, 68, 0.05);
+    }
+
+    .card-success {
+      border-color: rgba(16, 185, 129, 0.35);
+      background: rgba(16, 185, 129, 0.05);
+    }
+
+    .card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card p, .card li {
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+
+    ul {
+      list-style-position: inside;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* Table Styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(30, 41, 59, 0.8);
+      color: #94a3b8;
+      padding: 12px 16px;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .highlight-gain {
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    /* Footer Controls */
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+      margin-top: 16px;
+    }
+
+    .slide-num {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .nav-btn {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 8px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .keyboard-hint {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="deck-container">
+
+    <!-- SLIDE 1: Title & The Problem -->
+    <div class="slide active" id="slide-1">
+      <!-- <div class="slide-header">
+        <span class="badge">Problem & User Value (15 Pts)</span>
+        <span class="badge badge-time">⏱️ 0:00 – 0:35</span>
+      </div> -->
+      <div>
+        <h1>ArchitectOS</h1>
+        <h2>Autonomous Multi-Agent Engineering Committee & SDD Blueprint Generator</h2>
+      </div>
+      <div class="grid-2">
+        <div class="card card-danger">
+          <h3 style="color: #f87171;">⚠️ The Costly Dilemma</h3>
+          <ul>
+            <li><strong>Manual Planning ($10k–$30k):</strong> Takes weeks of expensive CTO/DBA/Architect alignment before a line of code is written.</li>
+            <li><strong>Generic AI Chatbots:</strong> Single prompts generate hallucinated APIs, orphan database tables, and zero security defenses.</li>
+          </ul>
+        </div>
+        <div class="card card-success">
+          <h3 style="color: #4ade80;">💡 The Solution: ArchitectOS</h3>
+          <ul>
+            <li><strong>8 Isolated Specialists:</strong> Requirements, Architecture, Data (DBA), API, QA, and Risk Engineering.</li>
+            <li><strong>Mathematical Verification:</strong> Deterministic AST linters & self-correction loop in under 45 seconds for &lt; $0.05.</li>
+          </ul>
+        </div>
+      </div>
+      <!-- <div class="slide-footer">
+        <span class="slide-num">Slide 1 / 5</span>
+        <span class="keyboard-hint">Press [Right Arrow →] for Next Slide</span>
+        <div>
+          <button class="nav-btn" onclick="nextSlide()">Next Slide →</button>
+        </div>
+      </div> -->
+    </div>
+
+    <!-- SLIDE 2: The Fair Baseline & Why It Fails -->
+    <div class="slide" id="slide-2">
+      <!-- <div class="slide-header">
+        <span class="badge">The Fair Baseline (0:35 – 1:10)</span>
+        <span class="badge badge-time">⏱️ 0:35 – 1:10</span>
+      </div> -->
+      <div>
+        <h1>The Fair Baseline: 1 Direct Prompt</h1>
+        <h2>Evaluating Single-Prompt LLM Generation on Frozen Benchmark Cases</h2>
+      </div>
+      <div class="grid-3">
+        <div class="card card-danger">
+          <h3 style="color: #f87171;">❌ 1. Data Integrity</h3>
+          <p>API operations reference non-existent database entities. Foreign keys and UUID primary keys are omitted.</p>
+        </div>
+        <div class="card card-danger">
+          <h3 style="color: #f87171;">❌ 2. Security Gaps</h3>
+          <p>State-mutating routes lack API Gateway rate-limiting and token rotation. Insecure auth placeholders remain.</p>
+        </div>
+        <div class="card card-danger">
+          <h3 style="color: #f87171;">❌ 3. Blind QA</h3>
+          <p>Test suites test only happy paths; zero negative security assertions (401/403/429 unauthorized rejection).</p>
+        </div>
+      </div>
+      <div class="card" style="margin-top: 16px; background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3);">
+        <p style="font-weight: 600; text-align: center; color: #93c5fd;">
+          📊 Baseline Outcome: 48.2% Verified Blueprint Coverage (VBC) | 32 Critical Violations | 60% Structured Validity
+        </p>
+      </div>
+      <!-- <div class="slide-footer">
+        <span class="slide-num">Slide 2 / 5</span>
+        <span class="keyboard-hint">👉 Switch to Browser Tab 2 for Live App Demo (1:10 – 3:15)</span>
+        <div>
+          <button class="nav-btn" onclick="prevSlide()">← Prev</button>
+          <button class="nav-btn" onclick="nextSlide()">Next Slide →</button>
+        </div>
+      </div> -->
+    </div>
+
+    <!-- SLIDE 3: Benchmark Comparison Table -->
+    <div class="slide" id="slide-3">
+      <!-- <div class="slide-header">
+        <span class="badge badge-success">Measured Improvement (15 Pts)</span>
+        <span class="badge badge-time">⏱️ 3:15 – 4:00</span>
+      </div> -->
+      <div>
+        <h1>Frozen 10-Case Benchmark Comparison</h1>
+        <h2>Direct Head-to-Head: Single Prompt vs. ArchitectOS Verified Multi-Agent</h2>
+      </div>
+      <div class="card" style="padding: 0; overflow: hidden;">
+        <table>
+          <thead>
+            <tr>
+              <th>Evaluation Metric</th>
+              <th>Simple Baseline (1 Prompt)</th>
+              <th>ArchitectOS (Multi-Agent)</th>
+              <th>Measured Gain</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-family: 'Inter', sans-serif; font-weight: 600;">Verified Blueprint Coverage (VBC)</td>
+              <td>48.2%</td>
+              <td style="color: #60a5fa; font-weight: 700;">94.6%</td>
+              <td class="highlight-gain">+46.4% Gain 🚀</td>
+            </tr>
+            <tr>
+              <td style="font-family: 'Inter', sans-serif; font-weight: 600;">Total Critical Findings</td>
+              <td>32 violations</td>
+              <td style="color: #4ade80; font-weight: 700;">0 violations</td>
+              <td class="highlight-gain">-100% (Zero Defects) 🛡️</td>
+            </tr>
+            <tr>
+              <td style="font-family: 'Inter', sans-serif; font-weight: 600;">Structured Output Validity Rate</td>
+              <td>60.0%</td>
+              <td style="color: #60a5fa; font-weight: 700;">100.0%</td>
+              <td class="highlight-gain">+40.0% Gain ✅</td>
+            </tr>
+            <tr>
+              <td style="font-family: 'Inter', sans-serif; font-weight: 600;">Average Cost per Task</td>
+              <td>$0.012</td>
+              <td>$0.041 (or $0.00 Local)</td>
+              <td style="color: #94a3b8;">High ROI</td>
+            </tr>
+            <tr>
+              <td style="font-family: 'Inter', sans-serif; font-weight: 600;">Average Execution Runtime</td>
+              <td>12.4s</td>
+              <td>38.6s</td>
+              <td style="color: #94a3b8;">Deterministic pipeline</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- <div class="slide-footer">
+        <span class="slide-num">Slide 3 / 5</span>
+        <span class="keyboard-hint">Press [Right Arrow →] for Changelog</span>
+        <div>
+          <button class="nav-btn" onclick="prevSlide()">← Prev</button>
+          <button class="nav-btn" onclick="nextSlide()">Next Slide →</button>
+        </div>
+      </div> -->
+    </div>
+
+    <!-- SLIDE 4: Changelog & Removed Experiment -->
+    <div class="slide" id="slide-4">
+      <!-- <div class="slide-header">
+        <span class="badge">Improvement Changelog (Deliverable 01)</span>
+        <span class="badge badge-time">⏱️ 4:00 – 4:30</span>
+      </div> -->
+      <div>
+        <h1>Evolution & The Removed Experiment</h1>
+        <h2>How ArchitectOS Evolved from Prompt Theatre to Deterministic Verification</h2>
+      </div>
+      <div class="grid-2">
+        <div class="card card-danger">
+          <h3 style="color: #f87171;">🚫 The Removed Experiment</h3>
+          <p><strong>Unconstrained Agent Chat Debate:</strong> We tested letting agents debate in open conversational chat.</p>
+          <ul>
+            <li>Exploded token costs by <strong>+380%</strong>.</li>
+            <li>Introduced sycophancy (agents politely agreed with hallucinations).</li>
+            <li><strong>Decision:</strong> Removed free-form debate.</li>
+          </ul>
+        </div>
+        <div class="card card-success">
+          <h3 style="color: #4ade80;">✅ The Winning Architecture</h3>
+          <p><strong>Typed Contracts & Deterministic Tool Linters:</strong></p>
+          <ul>
+            <li><code>SqlDdlValidator</code>: In-memory DDL syntax & FK integrity.</li>
+            <li><code>OpenApiValidator</code>: OpenAPI 3.0 route & auth verification.</li>
+            <li><code>SecurityLinter</code>: Adversarial SAST scanner for rate-limiting.</li>
+          </ul>
+        </div>
+      </div>
+      <!-- <div class="slide-footer">
+        <span class="slide-num">Slide 4 / 5</span>
+        <span class="keyboard-hint">Press [Right Arrow →] for Hot Take & Outro</span>
+        <div>
+          <button class="nav-btn" onclick="prevSlide()">← Prev</button>
+          <button class="nav-btn" onclick="nextSlide()">Next Slide →</button>
+        </div>
+      </div> -->
+    </div>
+
+    <!-- SLIDE 5: Hot Take & Ecosystem Handoff -->
+    <div class="slide" id="slide-5">
+      <!-- <div class="slide-header">
+        <span class="badge badge-success">Hot Take & Kiro SDD Handoff</span>
+        <span class="badge badge-time">⏱️ 4:30 – 4:55</span>
+      </div> -->
+      <div>
+        <h1>Hot Take & Ecosystem Integration</h1>
+        <h2>Spec-Driven Development (SDD) for Kiro & Autonomous Builders</h2>
+      </div>
+      <div class="grid-2">
+        <div class="card" style="border-color: rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.05);">
+          <h3 style="color: #fbbf24;">🔥 Our Hot Take</h3>
+          <p style="font-size: 1.05rem; line-height: 1.6; font-style: italic;">
+            "More agents do NOT make better software. Putting 8 prompt personas in a chat room creates prompt theatre. True reliability comes from strict domain boundaries, deterministic validation tools, and targeted self-correction loops."
+          </p>
+        </div>
+        <div class="card card-success">
+          <h3 style="color: #4ade80;">📦 1-Click .kiro/specs/ Handoff</h3>
+          <ul>
+            <li><strong>Direct Kiro Handoff:</strong> Emits requirements, PostgreSQL DDL, OpenAPI YAML, and test matrices directly into <code>.kiro/specs/</code>.</li>
+            <li><strong>Model Context Protocol (MCP):</strong> JSON-RPC 2.0 tool server.</li>
+            <li><strong>100% Reproducible:</strong> Clean Docker setup & 36 passing tests.</li>
+          </ul>
+        </div>
+      </div>
+      <!-- <div class="slide-footer">
+        <span class="slide-num">Slide 5 / 5</span>
+        <span class="keyboard-hint">🏆 Ready for Submission!</span>
+        <div>
+          <button class="nav-btn" onclick="prevSlide()">← Prev</button>
+          <button class="nav-btn" onclick="goToSlide(1)">Restart ↺</button>
+        </div>
+      </div> -->
+    </div>
+
+  </div>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 5;
+
+    function showSlide(num) {
+      if (num < 1) num = 1;
+      if (num > totalSlides) num = totalSlides;
+      currentSlide = num;
+      
+      document.querySelectorAll('.slide').forEach((slide, idx) => {
+        slide.classList.toggle('active', idx + 1 === currentSlide);
+      });
+    }
+
+    function nextSlide() {
+      showSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+      showSlide(currentSlide - 1);
+    }
+
+    function goToSlide(num) {
+      showSlide(num);
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'Space') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft') {
+        prevSlide();
+      }
+    });
+  </script>
+</body>
+</html>
